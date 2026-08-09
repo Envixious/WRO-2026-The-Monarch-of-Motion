@@ -1,5 +1,5 @@
 # WRO-2026-The-Monarch-of-Motion
-WRO 2026 Future Engineers project for The Monarch of Motion (MOM), an autonomous vehicle using Orange Pi 5, ESP32, PixyCam2, RPLIDAR C1, Ackermann steering, and Python-based navigation.
+WRO 2026 Future Engineers project for The Monarch of Motion (MoM), our team ,and our autonomous vehicle using Orange Pi 5, ESP32, PixyCam2, RPLIDAR C1, Ackermann steering, and Python-based navigation.
 # WRO 2026 Future Engineers — [The Monarch of Motion]
 ## 1. Project overview
 

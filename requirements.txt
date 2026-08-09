@@ -1,0 +1,6 @@
+# The Monarch of Motion (MOM)
+# WRO 2026 Future Engineers
+# Python dependencies for Orange Pi 5
+
+opencv-python==4.14.0.94
+numpy==2.5.1

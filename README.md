@@ -171,3 +171,79 @@ Software steering limits	To be calibrated
 Ackermann steering was selected because the WRO track contains repeated corners and requires accurate vehicle positioning. Reduced wheel slip should provide better consistency when MOM navigates both the Open Challenge and Obstacle Challenge.
 
 ### 3.4 Torque and speed reasoning
+The JGA25-370 geared DC motor was selected because the gearbox increases usable wheel torque while reducing the high rotational speed of the internal DC motor. This is suitable for MOM because the robot must repeatedly accelerate, slow down, turn, detect obstacles, and stop accurately.
+
+The final theoretical and experimental calculations will be completed once the following values are confirmed:
+
+JGA25-370 gearbox ratio;
+rated motor speed;
+rated motor torque;
+wheel diameter;
+operating voltage;
+total vehicle mass.
+
+The theoretical wheel speed can later be determined from the motor's geared output speed and wheel circumference.
+
+The expected vehicle speed will then be compared with actual measured speed during track testing.
+
+Testing will focus on the relationship between:
+
+vehicle speed;
+steering accuracy;
+stopping distance;
+cornering consistency;
+obstacle-detection response time;
+successful lap completion.
+
+A higher motor speed may reduce lap time but also increases stopping distance and makes steering corrections more difficult. A lower speed generally improves navigation accuracy but may make the vehicle unnecessarily slow.
+
+For MOM, the target will therefore be the highest speed at which the robot can repeatedly complete the course reliably, rather than simply using the highest possible motor speed.
+
+The ESP32 will allow motor output to be adjusted through software so several speed settings can be compared experimentally.
+
+A future test table will be used such as:
+
+Motor command	Mean speed	Successful runs	Steering errors	Stopping accuracy
+TBC	TBC	TBC	TBC	TBC
+TBC	TBC	TBC	TBC	TBC
+TBC	TBC	TBC	TBC	TBC
+
+The final competition speed will be selected based on testing data.
+
+### 3.5 Mechanical iterations
+
+TBC
+
+## 4. Power and sensor architecture
+
+### 4.1 Power system
+TBC
+
+### 4.2 Power budget
+The current preliminary power architecture is:
+
+Component	  Voltage	Typical current	Maximum current        	Power source
+Orange Pi 5 	TBC  	    TBC	             TBC	          Computing-system battery
+ESP32	        TBC	      TBC	             TBC	        Regulated computing supply / TBC
+JGA25-370 motor	TBC	    TBC	             TBC	           Motor-system battery
+MG996 servo	   TBC	    TBC	             TBC	       Motor/servo battery through suitable regulator
+PixyCam2	     TBC	    TBC	             TBC	         Computing-system battery
+RPLIDAR C1	   TBC	    TBC	             TBC	           Computing-system battery
+MPU6050	       TBC	    TBC	             TBC	         Regulated computing supply
+
+The final regulator capacity will be selected with additional current margin rather than operating continuously at its maximum rated output.
+
+This is particularly important for the Orange Pi 5 and MG996 servo. The Orange Pi 5 requires a stable supply voltage, while the MG996 can create sudden high-current demands when changing steering direction or operating under mechanical load.
+
+Brownout prevention will therefore be addressed through:
+
+separate power domains;
+correctly rated voltage regulators;
+suitable wiring size;
+reliable connectors;
+adequate current margin;
+common grounding between communicating controllers;
+careful power distribution.
+
+The system will be tested under maximum expected load, including simultaneous motor operation, steering movement, LiDAR scanning, and active computation.
+

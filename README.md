@@ -194,13 +194,86 @@ TBC
 | [Motor] | [V] | [A] | [A] | [SOURCE] |
 | [PixyCam2] | [5 V regulated] | [140 mA] | [Manufacturer does not specify a formal maximum] | [Computing-system battery] |
 | [RPLIDAR C1] | [5 V] | [230 mA] | [260 mA running; ~800 mA at startup] | [Computing-system battery] | 
-| [Motor] | [V] | [A] | [A] | [SOURCE] |
+| [ENCODER/IMU] | [V] | [A] | [A] | [SOURCE] |
 
 ### 4.3 Sensors and placement
 
 MOM uses multiple sensors because different sensors provide different types of environmental information.
 | Sensor | Purpose | Position | Interface | Why selected |
 |---|---|---|---|---|
-| [CAMERA] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
-| [DISTANCE SENSOR] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
+| [PixyCam2] | [Detect coloured obstacles, visual track features, and navigation markers] | [TBC] | [TBC] | [Performs fast colour/object processing and reduces processing demand on Orange Pi 5] |
+| [SLAMTEC RPLIDAR C1] | [Measure surrounding distances, detect walls, estimate track position, and support obstacle avoidance] | [TBC] | [TBC] | [Provides wide-area distance scanning instead of measurements from only a few fixed directions] |
 | [ENCODER/IMU] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
+
+### 4.4 Sensor calibration
+Reliable autonomous navigation requires each sensing and control system to be calibrated before competition.
+
+PixyCam2 Calibration
+
+The PixyCam2 will be calibrated to recognise the colours and objects required by the competition.
+
+Calibration will include:
+
+defining colour signatures;
+adjusting colour thresholds;
+verifying recognition distance;
+testing different object positions;
+checking false detections;
+testing under different lighting conditions.
+
+Lighting is particularly important because changes in brightness, shadows, reflections, and colour temperature can affect visual recognition.
+
+The team will test the camera under several realistic indoor lighting conditions rather than relying on a single setup.
+
+RPLIDAR C1 Calibration
+
+LiDAR calibration will include checking:
+
+measured distance against known physical distances;
+mounting orientation;
+angular reference position;
+minimum useful detection distance;
+measurement repeatability;
+areas blocked by the robot chassis.
+
+Any systematic offset discovered during testing can be corrected in software.
+
+Steering Calibration
+
+TBC
+
+Drive Calibration
+
+TBC
+
+Encoder Calibration
+
+TBC
+
+Calibration Data Storage
+
+TBC
+
+### 4.5 Wiring
+The Monarch of Motion (MOM) uses a distributed electronic architecture consisting of an Orange Pi 5, ESP32, PixyCam2, SLAMTEC RPLIDAR C1, JGA25-370 drive motor, MG996 steering servo, and a dual-battery power system.
+
+The wiring documentation is stored in:
+
+schemes/exported/wiring-diagram.png
+schemes/exported/power-distribution.png
+schemes/exported/system-block-diagram.png
+
+The complete wiring diagram should show both power connections and signal connections.
+
+## 5. Software architecture
+
+### 5.1 Controllers and languages
+
+MOM uses a two-controller architecture.
+| System | Controller | Role | Language | Development Environment |
+|---|---|---|---|---|
+| High-level control | Orange Pi 5 | Navigation, sensor processing, decision-making, parking strategy, and system coordination | Python | Visual Studio Code |
+| Low-level control | ESP32 | Drive motor control, steering control, and direct hardware interfacing | TBC | Visual Studio Code / ESP32 development environment |
+| Visual sensing | PixyCam2 | Colour and object recognition | PixyCam firmware + Orange Pi interface | PixyCam tools / Python interface |
+| Distance sensing | RPLIDAR C1 | 2D environmental distance scanning | Python interface | Visual Studio Code |
+| IMU, if used | MPU6050 | Angular motion and acceleration measurement | Python / ESP32 interface — TBC | TBC |

@@ -303,3 +303,31 @@ The current software files are:
 | `src/pixy_reader.py` | Orange Pi 5 | Reads visual/object information from PixyCam2 | PixyCam object data | Detected object information |
 | `src/pixycam2_basic.py` | Orange Pi 5 | Basic PixyCam2 connectivity and testing | PixyCam data | Diagnostic/test information |
 | `src/parallel_park.py` | Orange Pi 5 | Autonomous parking behaviour | Position, sensor, and navigation data | Parking steering and drive commands |
+
+### 5.3 Main program flow
+
+TBC
+
+### 5.4 Open Challenge strategy
+
+TBC
+
+### 5.5 Obstacle Challenge strategy
+
+TBC
+
+### 5.6 Control algorithms
+
+TBC
+
+### 5.7 Configuration values
+
+TBC
+
+## 6. Build and assembly instructions
+
+Full instructions are in `docs/build-guide.md`
+
+## 7. Software installation and operation
+
+### 7.1 Required software

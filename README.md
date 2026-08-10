@@ -183,3 +183,24 @@ TBC
 ## 4. Power and sensor architecture
 
 ### 4.1 Power system
+TBC
+
+### 4.2 Power budget
+| Component | Voltage | Typical current | Maximum current | Power source |
+|---|---:|---:|---:|---|
+| [Orange Pi 5] | [5 V] | [To be measured on MOM] | [4 A supply capacity] | [Computing-system battery] |
+| [ESP 32] | [3.3 V] | [~95–100 mA receiving; up to ~240 mA during high-power Wi-Fi TX] | [≥500 mA recommended supply capacity] | [Regulated computing supply] |
+| [SERVO] | [V] | [A] | [A] | [SOURCE] |
+| [Motor] | [V] | [A] | [A] | [SOURCE] |
+| [PixyCam2] | [5 V regulated] | [140 mA] | [Manufacturer does not specify a formal maximum] | [Computing-system battery] |
+| [RPLIDAR C1] | [5 V] | [230 mA] | [260 mA running; ~800 mA at startup] | [Computing-system battery] | 
+| [Motor] | [V] | [A] | [A] | [SOURCE] |
+
+### 4.3 Sensors and placement
+
+MOM uses multiple sensors because different sensors provide different types of environmental information.
+| Sensor | Purpose | Position | Interface | Why selected |
+|---|---|---|---|---|
+| [CAMERA] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
+| [DISTANCE SENSOR] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
+| [ENCODER/IMU] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |

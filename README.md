@@ -169,3 +169,17 @@ Software steering limits	To be calibrated
 Ackermann steering was selected because the WRO track contains repeated corners and requires accurate vehicle positioning. Reduced wheel slip should provide better consistency when MOM navigates both the Open Challenge and Obstacle Challenge.
 
 ### 3.4 Torque and speed reasoning
+
+TBC
+
+### 3.5 Mechanical iterations
+
+| Version | Change | Reason | Test evidence | Result |
+|---|---|---|---|---|
+| V1 | [CHANGE] | [WHY] | [TEST] | [RESULT] |
+| V2 | [CHANGE] | [WHY] | [TEST] | [RESULT] |
+| V3 | [CHANGE] | [WHY] | [TEST] | [RESULT] |
+
+## 4. Power and sensor architecture
+
+### 4.1 Power system

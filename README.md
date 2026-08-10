@@ -277,3 +277,29 @@ MOM uses a two-controller architecture.
 | Visual sensing | PixyCam2 | Colour and object recognition | PixyCam firmware + Orange Pi interface | PixyCam tools / Python interface |
 | Distance sensing | RPLIDAR C1 | 2D environmental distance scanning | Python interface | Visual Studio Code |
 | IMU, if used | MPU6050 | Angular motion and acceleration measurement | Python / ESP32 interface — TBC | TBC |
+
+The Orange Pi 5 acts as the main decision-making computer, while the ESP32 acts as the real-time hardware controller.
+
+This architecture separates computationally intensive tasks from time-sensitive motor and steering operations.
+
+The Python software is developed in Visual Studio Code and organized into individual modules so that sensor reading, navigation, vehicle control and parking can be developed and tested independently.
+
+Exact operating-system, Python, library and firmware versions will be recorded from the final competition system after the software environment has been frozen and successfully tested.
+
+### 5.2 Module structure
+
+The current Orange Pi software is located in:
+
+src/
+
+The current software files are:
+
+| Module/File | Controller | Responsibility | Main Inputs | Main Outputs |
+|---|---|---|---|---|
+| `src/fusion_main.py` | Orange Pi 5 | Main system integration and navigation coordination | LiDAR data, PixyCam data, vehicle state | Navigation and movement decisions |
+| `src/chassis_control.py` | Orange Pi 5 / ESP32 interface | Sends or manages drive and steering commands | Speed and steering targets | Motor and steering commands |
+| `src/lidar_reader.py` | Orange Pi 5 | Reads and processes RPLIDAR C1 measurements | LiDAR scan data | Distance and environmental information |
+| `src/basic_rplidar_c1.py` | Orange Pi 5 | Basic RPLIDAR C1 communication and testing | Raw LiDAR data | Diagnostic/test output |
+| `src/pixy_reader.py` | Orange Pi 5 | Reads visual/object information from PixyCam2 | PixyCam object data | Detected object information |
+| `src/pixycam2_basic.py` | Orange Pi 5 | Basic PixyCam2 connectivity and testing | PixyCam data | Diagnostic/test information |
+| `src/parallel_park.py` | Orange Pi 5 | Autonomous parking behaviour | Position, sensor, and navigation data | Parking steering and drive commands |

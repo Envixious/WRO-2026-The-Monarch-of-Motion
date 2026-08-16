@@ -41,8 +41,6 @@ Cable ties
 Thread-locking compound — optional / TBC
 Electronics Tools
 Digital multimeter
-Soldering iron
-Solder
 Heat-shrink tubing
 Electrical tape
 Dupont / JST crimping tool — connector type TBC
@@ -52,12 +50,6 @@ Fabrication Tools
 
 Depending on the final chassis and mounting design:
 
-3D printer
-PLA / PETG / other printing material — TBC
-Drill and drill bits — TBC
-Cutting tools for chassis material — TBC
-CAD software
-Onshape / other CAD platform — TBC
 Computer / Programming Tools
 Laptop or desktop computer
 Visual Studio Code
@@ -97,7 +89,7 @@ Installation procedure:
 Install the left and right front wheel steering assemblies.
 Install the steering arms.
 Install the tie rod / steering linkage.
-Install the MG996-series servo.
+Install the MG996-series servo. TBC
 Connect the servo horn to the steering linkage.
 Move the steering manually before powering the servo.
 Confirm that both wheels can move left and right without obstruction.
@@ -184,8 +176,7 @@ camera horizontal angle 360 degree;]
 
 9. [Install the MPU6050 TBC]
 
-10. [Install Battery TBC]
-
+10. [Install Battery Black Cell 1500 mAH]
 
 ## Electronics assembly
 1. Disconnect all batteries.

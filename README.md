@@ -28,7 +28,7 @@ A **SLAMTEC RPLIDAR C1** provides distance measurements around the vehicle. The 
 
 An **MPU6050 inertial measurement unit**, which is currently still to be confirmed, may be added to provide gyroscope and acceleration data. It could help detect changes in orientation, estimate turning movement, and support more stable navigation. However, the final use of the MPU6050 will depend on testing and whether it provides a meaningful improvement over the existing camera and LiDAR system.
 
-MOM uses a **dual-battery system**. The batteries can supply the computing system and the motor system separately. This reduces the possibility that electrical noise or sudden current demand from the drive motor and steering servo will interrupt or restart the Orange Pi 5. The final electrical design will include suitable voltage regulators, shared grounding, switches, fuses, and battery monitoring.
+MOM uses a **Single-battery system**. The battery that is used Black Cell 1500 mAH 60 C high Drain LiPO 11 V. According to the theory, the battery can supply the computing system and the motor system separately, although the robot needs to separated regulated branches for the computing system and the motor/servo system. Thius arrangement also reduce the risk of electrical noise or sudden demand from the drive motor and steering servo will cause voltage drops, interfere with the sensors, or restart the Orange Pi 5. This design also keep the size of the robot light, make the wiring less complicated, giving more space, and minimal the possibility of potential electrical failure.   
 
 ## Main Strengths
 
@@ -42,7 +42,7 @@ The **Ackermann steering mechanism** provides more realistic and controlled corn
 
 The **rear-wheel-drive layout** is mechanically simple and allows the front wheels to focus only on steering. This separation may make the vehicle easier to maintain, calibrate, and troubleshoot.
 
-The **dual-battery system** can improve electrical reliability by separating sensitive computing components from motors and servos that produce voltage drops and electrical noise. This is particularly important because the Orange Pi 5 requires a stable power supply.
+The single-battery architecture was selected to reduce weight, wiring complexity, space requirements, and the number of potential electrical failure points. Although the robot uses a common energy source, the computing, sensor, steering, and drive systems are supplied through separate regulated power branches. This provides the practical simplicity of a single battery while reducing the risk of voltage fluctuations from the motor system affecting the Orange Pi 5 and sensors
 
 ## Current Limitations
 
@@ -74,7 +74,6 @@ Overall, MOM has a strong foundation because it combines a compact mechanical pl
 - `video/` — YouTube links for autonomous demonstrations of both challenges.
 - `schemes/` — wiring, power, electronic, and system architecture diagrams.
 - `src/` — complete source code for every programmed controller.
-- `models/` — editable CAD files and exported STEP/STL manufacturing files.
 - `other/` — datasets, datasheets, setup notes, and other reproducibility materials.
 
 ## 3. Mobility and mechanical design
@@ -201,8 +200,8 @@ TBC
 MOM uses multiple sensors because different sensors provide different types of environmental information.
 | Sensor | Purpose | Position | Interface | Why selected |
 |---|---|---|---|---|
-| [PixyCam2] | [Detect coloured obstacles, visual track features, and navigation markers] | [TBC] | [TBC] | [Performs fast colour/object processing and reduces processing demand on Orange Pi 5] |
-| [SLAMTEC RPLIDAR C1] | [Measure surrounding distances, detect walls, estimate track position, and support obstacle avoidance] | [TBC] | [TBC] | [Provides wide-area distance scanning instead of measurements from only a few fixed directions] |
+| [PixyCam2] | [Detect coloured obstacles, visual track features, and navigation markers] | [In the front of chassi] | [TBC] | [Performs fast colour/object processing and reduces processing demand on Orange Pi 5] |
+| [SLAMTEC RPLIDAR C1] | [Measure surrounding distances, detect walls, estimate track position, and support obstacle avoidance] | [at the front of chassis and ontop of PixyCam 2] | [TBC] | [Provides wide-area distance scanning instead of measurements from only a few fixed directions] |
 | [ENCODER/IMU] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
 
 ### 4.4 Sensor calibration
@@ -331,4 +330,127 @@ Full instructions are in `docs/build-guide.md`
 ## 7. Software installation and operation
 
 ### 7.1 Required software
+
+The Orange Pi 5 requires:
+
+Linux-based Orange Pi operating system;
+Python 3;
+Visual Studio Code or another Python-compatible editor;
+Git;
+Python package manager (pip);
+OpenCV;
+NumPy;
+RPLIDAR communication library/driver;
+serial communication library where required;
+PixyCam2 interface software/library.
+
+The ESP32 requires an appropriate firmware development environment.
+
+The exact versions used on the final competition vehicle will be frozen and documented before competition.
+
+The repository contains:
+
+requirements.txt
+
+for Python dependencies.
+
+Only libraries actually required by MOM should be included.
+
+### 7.2 Installation
+
+Clone the repository:
+
+git clone https://github.com/<GITHUB-USERNAME>/WRO-2026-The-Monarch-of-Motion.git
+
+Enter the repository:
+
+cd WRO-2026-The-Monarch-of-Motion
+
+Create a Python virtual environment:
+
+python3 -m venv .venv
+
+Activate it:
+
+source .venv/bin/activate
+
+Update pip:
+
+python -m pip install --upgrade pip
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+The software can then be found in:
+
+src/orange-pi/
+
+The primary integration program is currently:
+
+fusion_main.py
+
+### 7.3 Uploading to Controllers
+
+Orange Pi 5
+
+The Python source code runs directly on the Orange Pi 5 and normally does not require compilation.
+
+After cloning or updating the repository:
+
+cd WRO-2026-The-Monarch-of-Motion/src/orange-pi
+
+Run individual hardware tests first.
+
+Examples:
+
+python3 basic_rplidar_c1.py
+python3 pixycam2_basic.py
+
+After confirming sensor communication:
+
+python3 fusion_main.py
+
+The actual commands will be updated if the final program structure changes.
+
+ESP32
+
+The ESP32 firmware will be built and uploaded using the selected ESP32 development environment.
+
+The final documentation will record:
+
+ESP32 board model;
+firmware framework;
+compiler/platform version;
+USB/serial settings;
+required libraries;
+upload procedure.
+
+These details should match the exact competition controller and must not be guessed.
+
+### 7.4 Running the Robot
+
+The planned competition startup procedure is:
+
+Place MOM in the required starting position.
+Verify that the wheels and steering are unobstructed.
+Switch on the computing-system battery.
+Allow the Orange Pi 5 to complete startup.
+Verify ESP32 communication.
+Verify PixyCam2 connection.
+Verify RPLIDAR C1 operation.
+Load the required challenge configuration.
+Confirm steering centre.
+Confirm motor output is zero.
+Start the navigation program.
+Wait for the required start condition.
+MOM begins autonomous operation.
+At the end of the run, the vehicle stops automatically.
+Stop the software safely.
+Switch off the actuator power.
+Switch off the computing power.
+
+Any abnormal sensor or communication condition should result in the vehicle remaining stopped or entering the defined fault state.
+
+### 7.5 Testing and Engineering Validation
 

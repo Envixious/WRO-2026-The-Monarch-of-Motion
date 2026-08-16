@@ -360,7 +360,7 @@ Only libraries actually required by MOM should be included.
 
 Clone the repository:
 
-git clone https://github.com/<GITHUB-USERNAME>/WRO-2026-The-Monarch-of-Motion.git
+git clone [https://github.com/<GITHUB-USERNAME>/WRO-2026-The-Monarch-of-Motion](https://github.com/Envixious/WRO-2026-The-Monarch-of-Motion/).git
 
 Enter the repository:
 

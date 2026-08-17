@@ -1,92 +1,107 @@
-"""Reusable RPLIDAR C1 reader module (USB serial).
+"""Compatibility wrapper for the shared LiDAR snapshot produced by scan_lidar.py.
 
-Usage:
-  from lidar_reader import LidarReader
+The actual scanning and printing are delegated to the dedicated helper scripts,
+so this module stays lightweight and only exposes the same simple interface for
+existing code paths.
 
-  reader = LidarReader(port="COM4")
-  reader.start()
-  dist = reader.get_distance_at(90.0)   # mm straight ahead
-  obstacles = reader.get_obstacles_in_sector(-30, 30)  # front
-  reader.stop()
+Uses per-call snapshot caching to avoid repeated file I/O.
 """
 
 from __future__ import annotations
 
-import threading
+import os
+import pickle
 import time
-from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
 
-@dataclass
-class ScanPoint:
-    """A single LIDAR measurement."""
-    angle_deg: float
-    distance_mm: float
-    quality: int
-
-
 class LidarReader:
-    """Reads RPLIDAR C1 scans in a background thread.
-
-    Stores the latest full 360-degree scan as a dictionary
-    keyed by integer angle (0-359).
+    """Read the latest LiDAR measurements from the shared pickle file.
+    
+    Caches snapshots in memory to avoid repeated file I/O on multiple calls.
     """
 
-    def __init__(self, port: str = "COM4", baudrate: int = 115200) -> None:
+    def __init__(
+        self,
+        port: str = "/dev/ttyUSB0",
+        baudrate: int = 460800,
+        output_file: Optional[str] = None,
+    ) -> None:
         self._port = port
         self._baudrate = baudrate
-        self._lidar: Optional[object] = None
-        self._lock = threading.Lock()
-        # Latest scan: angle_deg (int) -> distance_mm (float)
-        self._scan_map: Dict[int, float] = {}
-        self._thread: Optional[threading.Thread] = None
-        self._running = False
+        self._output_file = output_file or os.environ.get(
+            "LIDAR_DATA_PATH",
+            "/dev/shm/lidar.data",
+        )
+        self._last_error: Optional[str] = None
+        self._available = False
+        self._cached_snapshot: Optional[Dict[int, float]] = None
+        self._cache_timestamp = 0.0
+        self._cache_ttl = 0.1  # Cache for 100ms (max 1 iteration at 10 Hz)
 
-    def start(self) -> None:
-        """Open the LIDAR and start the polling thread."""
-        try:
-            from rplidar import RPLidar
-        except Exception:
-            raise RuntimeError(
-                "Failed to import rplidar. Install with: pip install rplidar"
-            )
-
-        self._lidar = RPLidar(self._port, baudrate=self._baudrate)
-        time.sleep(0.2)
-
-        self._running = True
-        self._thread = threading.Thread(target=self._poll_loop, daemon=True)
-        self._thread.start()
+    def start(self) -> bool:
+        """Mark the reader as ready; the real scanning is handled by scan_lidar.py."""
+        self._last_error = None
+        self._available = True
+        return True
 
     def stop(self) -> None:
-        """Stop the polling thread and disconnect the LIDAR."""
-        self._running = False
-        if self._thread and self._thread.is_alive():
-            self._thread.join(timeout=2.0)
-        if self._lidar:
-            try:
-                self._lidar.stop()
-            except Exception:
-                pass
-            try:
-                self._lidar.disconnect()
-            except Exception:
-                pass
+        """Stop the compatibility reader."""
+        self._available = False
+        self._cached_snapshot = None
+
+    def get_output_file_path(self) -> str:
+        """Return the shared LiDAR snapshot path."""
+        return self._output_file
+
+    def is_available(self) -> bool:
+        """Return True when the shared LiDAR snapshot file exists."""
+        return self._available and os.path.exists(self._output_file)
+
+    def get_last_error(self) -> str:
+        """Return the most recent error message."""
+        return self._last_error or ""
+
+    def _load_snapshot(self, use_cache: bool = True) -> Optional[Dict[int, float]]:
+        """Load the latest scan snapshot from the shared pickle file.
+        
+        Args:
+            use_cache: If True, reuse cached snapshot if still fresh (default True).
+        """
+        # Check if we can use cached snapshot (still within TTL)
+        if use_cache and self._cached_snapshot is not None:
+            age = time.time() - self._cache_timestamp
+            if age < self._cache_ttl:
+                return self._cached_snapshot  # Use cached, avoid file I/O
+        
+        # Cache miss or expired: reload from disk
+        if not self._output_file or not os.path.exists(self._output_file):
+            return None
+
+        try:
+            with open(self._output_file, "rb") as handle:
+                payload = pickle.load(handle)
+            if isinstance(payload, dict):
+                self._cached_snapshot = {int(angle): float(distance) for angle, distance in payload.items()}
+                self._cache_timestamp = time.time()
+                return self._cached_snapshot
+        except Exception as exc:
+            self._last_error = str(exc)
+
+        return None
 
     def get_scan_map(self) -> Dict[int, float]:
         """Return a copy of the latest scan map {angle_deg: distance_mm}."""
-        with self._lock:
-            return dict(self._scan_map)
+        snapshot = self._load_snapshot()
+        return dict(snapshot or {})
 
     def get_distance_at(self, angle: float) -> Optional[float]:
-        """Get the distance (mm) at a given angle (degrees, 0-359).
-
-        Returns None if no measurement exists for that angle.
-        """
+        """Get the distance (mm) at a given angle (degrees, 0-359)."""
+        snapshot = self._load_snapshot()
+        if not snapshot:
+            return None
         idx = int(round(angle)) % 360
-        with self._lock:
-            return self._scan_map.get(idx)
+        return snapshot.get(idx)
 
     def get_obstacles_in_sector(
         self,
@@ -94,27 +109,24 @@ class LidarReader:
         end_angle: float,
         max_distance: float = 1000.0,
     ) -> List[Tuple[float, float]]:
-        """Return list of (angle, distance_mm) for obstacles within the
-        given angular sector that are closer than max_distance (mm).
+        """Return the obstacles in a sector based on the shared snapshot."""
+        snapshot = self._load_snapshot()
+        if not snapshot:
+            return []
 
-        Angles wrap around 0/360 correctly.
-        """
         start_i = int(round(start_angle)) % 360
         end_i = int(round(end_angle)) % 360
         results: List[Tuple[float, float]] = []
 
-        with self._lock:
-            sm = self._scan_map
+        if start_i <= end_i:
+            angles = range(start_i, end_i + 1)
+        else:
+            angles = list(range(start_i, 360)) + list(range(0, end_i + 1))
 
-            if start_i <= end_i:
-                angles = range(start_i, end_i + 1)
-            else:
-                angles = list(range(start_i, 360)) + list(range(0, end_i + 1))
-
-            for a in angles:
-                d = sm.get(a)
-                if d is not None and d > 0 and d < max_distance:
-                    results.append((float(a), d))
+        for angle in angles:
+            distance = snapshot.get(angle)
+            if distance is not None and distance > 0 and distance < max_distance:
+                results.append((float(angle), float(distance)))
 
         return results
 
@@ -123,52 +135,8 @@ class LidarReader:
         start_angle: float,
         end_angle: float,
     ) -> Optional[Tuple[float, float]]:
-        """Find the closest obstacle in the sector.
-
-        Returns (angle, distance_mm) or None.
-        """
+        """Find the closest obstacle in the sector."""
         pts = self.get_obstacles_in_sector(start_angle, end_angle)
         if not pts:
             return None
         return min(pts, key=lambda p: p[1])
-
-    def _poll_loop(self) -> None:
-        """Background loop: read scans and update the map."""
-        if self._lidar is None:
-            return
-
-        try:
-            for scan in self._lidar.iter_scans():
-                if not self._running:
-                    break
-
-                new_map: Dict[int, float] = {}
-                for item in scan:
-                    quality, angle_deg, distance_mm = item
-                    if distance_mm > 0:
-                        idx = int(round(angle_deg)) % 360
-                        # Only keep the closest reading at each angle
-                        if idx not in new_map or distance_mm < new_map[idx]:
-                            new_map[idx] = distance_mm
-
-                with self._lock:
-                    self._scan_map = new_map
-        except Exception:
-            pass
-
-
-if __name__ == "__main__":
-    reader = LidarReader(port="COM4")
-    reader.start()
-    try:
-        for _ in range(20):
-            front = reader.get_distance_at(0)
-            left = reader.get_distance_at(90)
-            right = reader.get_distance_at(270)
-            print(f"Front: {front:.0f} mm, Left: {left:.0f} mm, Right: {right:.0f} mm")
-            time.sleep(0.2)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        reader.stop()
-        print("LidarReader stopped.")

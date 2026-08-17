@@ -60,22 +60,40 @@ class PixyReader:
         self._detections: List[ColorDetection] = []
         self._thread: Optional[threading.Thread] = None
         self._running = False
+        self._available = False
+        self._error_message: Optional[str] = None
 
     def start(self) -> None:
         """Initialise the camera and start the polling thread."""
-        try:
-            import pixy2  # type: ignore
-        except Exception:
-            raise RuntimeError(
-                "Failed to import pixy2 module. Install the Pixy2 Python wrapper."
-            )
+        if self._running:
+            return
 
-        self._cam = pixy2.Pixy2()
+        try:
+            import pixy   # type: ignore
+        except Exception as exc:
+            self._available = False
+            self._error_message = (
+                "Failed to import pixy module. Install the Pixy Python wrapper "
+                f"or run this on the machine that has the camera attached. ({exc})"
+            )
+            print(f"[pixy] {self._error_message}")
+            return
+
+        if not hasattr(pixy, "init"):
+            self._available = False
+            self._error_message = (
+            )
+            print(f"[pixy] {self._error_message}")
+            return
+
+        self._cam = pixy.init()
         try:
             self._cam.init()
         except AttributeError:
             pass  # some wrappers auto-init
 
+        self._available = True
+        self._error_message = None
         self._running = True
         self._thread = threading.Thread(target=self._poll_loop, daemon=True)
         self._thread.start()
@@ -96,6 +114,46 @@ class PixyReader:
         """Return the latest frame of colour detections."""
         with self._lock:
             return list(self._detections)
+
+    @property
+    def available(self) -> bool:
+        """Return whether the Pixy camera is available for use."""
+        return self._available
+
+    @property
+    def error_message(self) -> Optional[str]:
+        """Return the last error message encountered while starting the camera."""
+        return self._error_message
+
+    def set_lamp(self, enabled: bool) -> None:
+        """Toggle the PixyCam2 lamp/LED if the wrapper exposes it.
+
+        Some Pixy2 wrappers support either set_lamp() or set_led(). The method is
+        intentionally defensive so that the robot can still run even when the LED
+        API is unavailable on the current firmware or library version.
+        """
+        if self._cam is None:
+            return
+
+        for method_name in ("set_lamp", "setLamp", "set_led", "setLED"):
+            method = getattr(self._cam, method_name, None)
+            if not callable(method):
+                continue
+
+            try:
+                if enabled:
+                    try:
+                        method(1, 1)
+                    except TypeError:
+                        method(255, 255, 255)
+                else:
+                    try:
+                        method(0, 0)
+                    except TypeError:
+                        method(0, 0, 0)
+                return
+            except Exception:
+                pass
 
     def get_latest_colors(self) -> List[str]:
         """Convenience: return just the colour names detected."""

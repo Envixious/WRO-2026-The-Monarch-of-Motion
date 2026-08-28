@@ -156,15 +156,16 @@ The exact steering-angle range will be measured after the final steering linkage
 
 Current steering specifications:
 
-Specification	Current design
-Steering geometry	Ackermann
-Steering motor	1 × MG996 servo
-Steering controller	ESP32
-Centre position	To be calibrated
-Maximum left angle	TBC
-Maximum right angle	TBC
-Mechanical stops	To be finalizedx
-Software steering limits	To be calibrated
+| Specification | Current Design |
+|---|---|
+| Steering Geometry | Ackermann |
+| Steering Motor | 1 × MG996 servo |
+| Steering Controller | ESP32 |
+| Centre Position | 90° |
+| Maximum Left Angle | 50° |
+| Maximum Right Angle | 130° |
+| Mechanical Stops | TBC |
+| Software Steering Limits | Left: 50°–90°; Right: 90°–130° |
 
 Ackermann steering was selected because the WRO track contains repeated corners and requires accurate vehicle positioning. Reduced wheel slip should provide better consistency when MOM navigates both the Open Challenge and Obstacle Challenge.
 
@@ -186,15 +187,14 @@ TBC
 TBC
 
 ### 4.2 Power budget
-| Component | Voltage | Typical current | Maximum current | Power source |
+| Component | Voltage | Typical Current | Maximum / Peak Current | Power Source |
 |---|---:|---:|---:|---|
-| [Orange Pi 5] | [5 V] | [To be measured on MOM] | [4 A supply capacity] | [Computing-system battery] |
-| [ESP 32] | [3.3 V] | [~95–100 mA receiving; up to ~240 mA during high-power Wi-Fi TX] | [≥500 mA recommended supply capacity] | [Regulated computing supply] |
-| [SERVO] | [V] | [A] | [A] | [SOURCE] |
-| [Motor] | [V] | [A] | [A] | [SOURCE] |
-| [PixyCam2] | [5 V regulated] | [140 mA] | [Manufacturer does not specify a formal maximum] | [Computing-system battery] |
-| [RPLIDAR C1] | [5 V] | [230 mA] | [260 mA running; ~800 mA at startup] | [Computing-system battery] | 
-| [ENCODER/IMU] | [V] | [A] | [A] | [SOURCE] |
+| Orange Pi 5 Pro | 5 V | TBC | 4 A supply capacity | Buck Converter (5 V) |
+| ESP32 | 3.3 V | TBC | TBC | Buck Converter (5 V) |
+| MG996 Servo | 6 V | ~500 mA | ~2.5 A | Buck Converter (6 V) |
+| JGA25-370 Motor | 6 V | TBC | TBC | Buck Converter (6 V) |
+| PixyCam2 | 5 V | ~140 mA | TBC | Orange Pi 5 Pro |
+| RPLIDAR C1 | 5 V | ~230 mA | ~260 mA operating / ~800 mA startup | Orange Pi 5 Pro |
 
 ### 4.3 Sensors and placement
 

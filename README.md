@@ -90,19 +90,20 @@ The exact chassis material, total vehicle weight, wheelbase, track width, and me
 
 Current chassis specifications:
 
-Specification	Value
-Length	250 mm
-Width	170 mm
-Height	100 mm
-Maximum WRO length	300 mm
-Maximum WRO width	200 mm
-Maximum WRO height	300 mm
-Vehicle weight	TBC
-Wheelbase	TBC
-Front track width	TBC
-Rear track width	TBC
-Chassis material	TBC
-Centre of mass	TBC
+| Specification | Value |
+|---|---:|
+| Length | 237 mm |
+| Width | 145 mm |
+| Height | 90 mm |
+| Max WRO Length | 300 mm |
+| Max WRO Width | 200 mm |
+| Max WRO Height | 300 mm |
+| Vehicle Weight | 900 g |
+| Wheelbase | 140 mm |
+| Front Track Width | 121 mm |
+| Rear Track Width | 121 mm |
+| Chassis Material | Metal |
+| Centre of Mass | Battery area |
 
 The mounting system is designed to keep the major components securely attached while maintaining enough rigidity to prevent unwanted chassis flex. Particular attention is given to the steering mechanism and sensor mounts because movement or vibration in these areas could reduce navigation accuracy.
 
@@ -120,16 +121,16 @@ The final motor driver, gearbox ratio, wheel diameter, encoder specification, an
 
 Current drive-system specifications:
 
-Specification	Current design
-Drive layout	Rear-wheel drive
-Drive motor	1 × JGA25-370 DC geared motor
-Number of drive motors	1
-Gear ratio	TBC
-Wheel diameter	TBC
-Encoder	TBC
-Motor driver	TBC
-Controller	ESP32
-High-level controller	Orange Pi 5
+| Specification | Current Design |
+|---|---|
+| Drive Layout | Rear-wheel drive |
+| Drive Motor | 1 × JGA25-370 DC geared motor |
+| Number of Drive Motors | 1 |
+| Gear Ratio | 1.35:1 |
+| Wheel Diameter | 65 mm |
+| Motor Driver | 1 × TB6612FNG Wemos Motor Shield |
+| Controller | 1 × ESP32 |
+| High-Level Controller | 1 × Orange Pi 5 Pro |
 
 The ESP32 will provide the low-level motor-control commands, while the Orange Pi 5 will determine the required vehicle movement based on information from the navigation sensors.
 

@@ -305,12 +305,17 @@ The current software files are:
 | `src/parallel_park.py` | Orange Pi 5 | Autonomous parking behaviour | Position, sensor, and navigation data | Parking steering and drive commands |
 
 ### 5.3 Main program flow
+The main control sequence is coordinated by fusion_main.py. At startup, it configures logging through log_config.py, launches scan_lidar.py and scan_pixy.py as sensor helper processes, and connects to the motor controller using serial_chassis.py. The LiDAR helper publishes recent distance measurements to a shared snapshot, while the Pixy helper publishes detected color blocks. During operation, fusion_main.py reads these snapshots to make navigation decisions. If it cannot connect to the chassis, it uses serial_utils.py to help identify available serial ports.
 
-TBC
+The program then repeatedly reads the latest sensor data. It first checks the LiDAR readings for a very close obstacle in front of the car; if one is found, the car briefly reverses and stops before continuing. Next, it checks orange and blue detections to count course corners and laps. These detections are mapped to color names using pixy_reader.py, and the lap-counting logic is in fusion_main.py. The car stops after the configured target of three laps.
+
+For navigation, fusion_main.py selects red or green blocks detected by PixyCam2 and waits for repeated detections before acting, helping avoid turns based on a single unreliable frame. It passes a confirmed detection to pixy_calculations.py, which filters out track-like markings, estimates the obstacle’s distance from its image size, and calculates a steering plan. Red obstacles are passed on the left and green obstacles on the right. If an obstacle is too close, fusion_main.py briefly reverses before turning, then holds the chosen direction through temporary missed detections and drives straight briefly after the obstacle is passed.
+
+When PixyCam2 has not recently identified a red or green obstacle, LiDAR acts as a fallback: fusion_main.py checks whether the front is blocked and, if so, compares the measured clearance on either side before turning toward a clearer path. The program continues checking the front path and returns to normal navigation once it is clear. A parallel-parking routine is implemented in parallel_park.py, but its pink-detection trigger is commented out in the current fusion_main.py, so it is not part of the active program flow. When the run ends or shutdown is requested, fusion_main.py stops the chassis and terminates the sensor helper processes.
 
 ### 5.4 Open Challenge strategy
 
-TBC
+TBC  
 
 ### 5.5 Obstacle Challenge strategy
 

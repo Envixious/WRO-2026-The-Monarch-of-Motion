@@ -323,11 +323,50 @@ TBC
 
 ### 5.6 Control algorithms
 
-TBC
+The M.O.M. uses a reactive, sensor-based control algorithm rather than a PID controller or a preplanned route. During each control-loop iteration, fusion_main.py reads the latest PixyCam2 detections and refreshes the LiDAR snapshot. The program selects its next action from the current sensor readings and navigation state. It does not calculate a continuous speed or steering correction from a position-error value; instead, it issues discrete forward, reverse, turn, or stop commands.
+
+Red and green obstacle avoidance combines PixyCam2 detection with image-based distance estimation. pixy_reader.py maps the camera’s signatures to color names and provides each block’s image position and size. The program filters out likely track markings and requires a red or green obstacle to appear in at least three of the most recent five frames before beginning an avoidance maneuver. In pixy_calculations.py, the apparent block size is used to estimate its distance, and its horizontal image position is converted to an approximate bearing. The algorithm then calculates a pass-by point beside the block and derives a steering command toward that point. The color determines the permitted passing direction: red is passed on the left, and green on the right. If the estimated distance is below the configured turn-ready distance, the car reverses before turning.
+
+Once an avoidance turn begins, the controller enters an AVOID state and keeps the selected turn direction fixed. It can update the steering amount while the same obstacle remains visible, but a temporarily missed camera detection does not immediately cancel the turn. The program considers the obstacle passed after at least 0.8 seconds of turning and five consecutive frames without the target, or ends the maneuver at the 1.8-second timeout. It then enters a brief RECOVER state, driving straight for 0.25 seconds before returning to normal navigation. These state transitions help prevent abrupt steering changes caused by intermittent camera detections.
+
+LiDAR obstacle avoidance acts as a fallback when PixyCam2 has not recently detected a red or green obstacle. The front is considered blocked when at least three readings in the forward 30-degree cone are at or below 600 mm. The controller then compares average valid distance readings in left and right sectors and turns toward a side whose calculated clearance meets the configured 300 mm minimum. If neither side has enough confirmed clearance, it reverses briefly and stops. While in LiDAR avoidance, the car keeps monitoring PixyCam2: two matching color detections can transfer control to the color-based avoidance algorithm. Otherwise, the LiDAR turn is held for the configured turn time, after which the car returns to normal navigation only if enough front readings indicate that the path is clear.
+
+A separate close-obstacle check runs before the normal navigation decisions. If at least two front-cone LiDAR points indicate an obstacle within 150 mm, the program commands a brief reverse and stop. Lap counting is also handled in fusion_main.py: orange and blue detections are counted as course markers, with four corners counted as one lap; reaching the configured three-lap target stops the car.
+
+Finally, serial_chassis.py converts each movement request into a serial steering/throttle pair for the chassis controller. Steering is represented by values from −100 to +100, where each unit corresponds to 0.5 degrees; throttle ranges from −100 (reverse) to +100 (forward), with 0 meaning stop. Thus, the control algorithm calculates which direction and speed command to send, while the chassis module handles transmitting that command.
 
 ### 5.7 Configuration values
 
-TBC
+The M.O.M. program uses configuration values to set the sensor connections, obstacle-detection thresholds, movement speeds, and navigation behavior. Most navigation settings are defined in fusion_main.py, while camera geometry and avoidance calculations are in pixy_calculations.py. The values below describe the current code and should be treated as tuning parameters; actual performance depends on the robot, sensor mounting, and course setup.
+
+| Configuration | Current value | Purpose |
+|---|---:|---|
+| LiDAR serial port | `/dev/ttyUSB0` | Default port used to connect to the RPLIDAR. |
+| LiDAR baud rate | `460800` | Serial communication speed used by the LiDAR helper. |
+| Chassis serial port | `/dev/ttyS2` | Default port used to connect to the chassis controller. |
+| Chassis baud rate | `9600` | Baud rate passed by the main program to the chassis module. |
+| Pixy frame size and horizontal field of view | `316 × 208` pixels; `60°` | Camera geometry used to estimate an obstacle’s bearing and distance. |
+| Estimated marker width | `50 mm` | Physical width assumed by the Pixy-based distance estimate. |
+| Estimated chassis width | `146 mm` | Robot width used when calculating a safe pass-by point. |
+| Passing clearance | `60 mm` | Additional space included in the pass-by calculation. |
+| Steering range and scale | `−100` to `+100`; `0.5°` per unit | Steering command range; maximum steering corresponds to approximately `50°`. |
+| Avoidance steering limits | `40`–`100` units | Minimum and maximum steering values for color-based avoidance. |
+| Red/green detection confirmation | `3 hits in a 5-frame window` | Helps prevent a single noisy camera reading from triggering a turn. |
+| LiDAR front-obstacle threshold | `600 mm` | Distance threshold used to identify a blocked front path. |
+| LiDAR emergency threshold | `150 mm` | Very close obstacle threshold that triggers a brief reverse command. |
+| Minimum LiDAR points for detection | `3`; `2` for emergency check | Requires multiple readings rather than relying on one isolated return. |
+| Minimum side clearance | `300 mm` | Minimum clearance required for the LiDAR fallback to choose a side. |
+| Forward, reverse, and turn speeds | `30`, `50`, and `30` | Chassis command speeds for normal driving, reversing, and color-based turns. |
+| LiDAR fallback turn speed | `70` | Speed used during a LiDAR-initiated turn. |
+| LiDAR fallback turn duration | `0.8 s` | Default turn duration; adjustable with `--turn-time`. |
+| Pixy avoidance timing | Minimum `0.8 s`; maximum `1.8 s` | Minimum turn time and safety timeout for color-based avoidance. |
+| Post-avoidance recovery | `0.25 s` | Time spent driving straight before returning to normal navigation. |
+| Lap-counting configuration | `4` corners per lap; `3` target laps | Orange and blue marker detections counted toward the lap target. |
+| Marker re-count interval | `1.5 s` | Prevents one continuously visible marker from being counted repeatedly. |
+
+The main program also accepts command-line options for the LiDAR and chassis ports, serial baud rates, LiDAR turn time, minimum side clearance, and logging options. The LiDAR snapshot path can be changed with the LIDAR_DATA_PATH environment variable; marker width and chassis width can be changed with WRO_SIGN_WIDTH_MM and CAR_WIDTH_MM, respectively.
+
+One configuration detail to verify during setup is the chassis baud rate: fusion_main.py currently passes 9600 by default, while serial_chassis.py defines 115200 as the class default. Because the main program passes its baud rate explicitly, the active default is 9600; it should match the ESP32 firmware configuration. 
 
 ## 6. Build and assembly instructions
 

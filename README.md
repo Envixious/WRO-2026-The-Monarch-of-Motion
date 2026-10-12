@@ -12,27 +12,26 @@
 
 **The Monarch of Motion (MOM)** is an autonomous vehicle developed for the WRO Future Engineers competition. The vehicle is designed to navigate the competition field, detect track boundaries and obstacles, determine its driving direction, complete the required laps, and perform autonomous parking without human control.
 
-MOM has compact dimensions of **250 mm in length, 170 mm in width, and 100 mm in height**. These dimensions remain within the WRO maximum vehicle size of **300 mm × 200 mm × 300 mm**. Its low-profile design helps lower the centre of gravity, improving stability during cornering and reducing unnecessary body movement.
+MOM has compact dimensions of 290 mm in length, 150 mm in width, and 135 mm in height. These dimensions remain within the WRO maximum vehicle size of 300 mm × 200 mm × 300 mm. Its low-profile design helps lower the centre of gravity, improving stability during cornering and reducing unnecessary body movement.
 
-The vehicle uses a **rear-wheel-drive system powered by one JGA25-370 DC geared motor**. This configuration complies with the WRO rule allowing a maximum of one drive motor. Rear-wheel drive provides a simple and efficient mechanical arrangement while leaving the front section available for the steering mechanism and sensors.
+
+The vehicle uses a rear-wheel-drive system powered by one **JGA25-370 DC** geared motor. This configuration complies with the WRO rule allowing a maximum of one drive motor. Rear-wheel drive provides a simple and efficient mechanical arrangement while leaving the front section available for the steering mechanism and sensors.
 
 Steering is controlled by one **MG996 servo motor** connected to an **Ackermann steering system**. This also complies with the WRO rule permitting a maximum of one steering motor. Ackermann steering allows the inner and outer front wheels to turn at different angles during a corner, reducing tyre slip and improving turning accuracy.
 
-The main processing system consists of an **Orange Pi 5** and an **ESP32**. The Orange Pi 5 functions as the vehicle’s main computer or “brain.” It is responsible for high-level tasks such as sensor processing, obstacle detection, navigation decisions, route planning, and competition strategy. The ESP32 functions as the real-time control unit. It receives instructions from the Orange Pi 5 and controls the drive motor, steering servo, and other low-level hardware functions.
+The main processing system consists of an **Orange Pi 5 Pro** and an **ESP32**. The Orange Pi 5 Pro functions as the vehicle’s main computer or “brain.” It is responsible for high-level tasks such as sensor processing, obstacle detection, navigation decisions, route planning, and competition strategy. The ESP32 functions as the real-time control unit. It receives instructions from the Orange Pi 5 Pro and controls the drive motor, steering servo, and other low-level hardware functions.
 
-The software is developed using **Visual Studio Code** with **Python** as the main programming language. Python is used because it supports rapid development, sensor integration, computer vision, data processing, and clear modular programming. The ESP32 may use separate firmware for direct motor and servo control, while communication between the Orange Pi 5 and ESP32 allows the system to separate high-level decision-making from time-sensitive hardware control.
+The software is developed using **Visual Studio Code** with **Python** as the main programming language. Python is used because it supports rapid development, sensor integration, computer vision, data processing, and clear modular programming. The ESP32 may use separate firmware for direct motor and servo control, while communication between the Orange Pi 5 Pro and ESP32 allows the system to separate high-level decision-making from time-sensitive hardware control.
 
-For visual detection, MOM uses a **PixyCam2**. The camera is intended to identify important visual features such as coloured obstacles, track elements, and navigation markers. Because PixyCam2 performs some image processing internally, it can reduce the processing workload placed on the Orange Pi 5.
+For visual detection, MOM uses a **PixyCam2**. The camera is intended to identify important visual features such as coloured obstacles, track elements, and navigation markers. Because PixyCam2 performs some image processing internally, it can reduce the processing workload placed on the Orange Pi 5 Pro.
 
 A **SLAMTEC RPLIDAR C1** provides distance measurements around the vehicle. The LiDAR can be used to detect walls, estimate the vehicle’s position relative to track boundaries, measure available space, and support obstacle avoidance. Its wide scanning range gives the vehicle more environmental information than a small number of fixed distance sensors.
 
-An **MPU6050 inertial measurement unit**, which is currently still to be confirmed, may be added to provide gyroscope and acceleration data. It could help detect changes in orientation, estimate turning movement, and support more stable navigation. However, the final use of the MPU6050 will depend on testing and whether it provides a meaningful improvement over the existing camera and LiDAR system.
-
-MOM uses a **Single-battery system**. The battery that is used Black Cell 1500 mAH 60 C high Drain LiPO 11 V. According to the theory, the battery can supply the computing system and the motor system separately, although the robot needs to separated regulated branches for the computing system and the motor/servo system. Thius arrangement also reduce the risk of electrical noise or sudden demand from the drive motor and steering servo will cause voltage drops, interfere with the sensors, or restart the Orange Pi 5. This design also keep the size of the robot light, make the wiring less complicated, giving more space, and minimal the possibility of potential electrical failure.   
+MOM uses a **Single-battery system**. The battery that is used Black Cell 1500 mAH 60 C high Drain LiPO 11 V. According to the theory, the battery can supply the computing system and the motor system separately, although the robot needs to separate regulated branches for the computing system and the motor/servo system. This arrangement also reduces the risk of electrical noise or sudden demand from the drive motor and steering servo will cause voltage drops, interfere with the sensors, or restart the Orange Pi 5 Pro. This design also keeps the size of the robot light, makes the wiring less complicated, gives more space, and minimizes the possibility of potential electrical failure.
 
 ## Main Strengths
 
-One of the main strengths of MOM is its **hybrid control architecture**. The Orange Pi 5 handles complex navigation and sensor-processing tasks, while the ESP32 manages direct hardware control. This division reduces the workload on each controller and allows the motor and steering system to respond quickly even when the Orange Pi 5 is processing camera or LiDAR data.
+One of the main strengths of MOM is its **hybrid control architecture**. The Orange Pi 5 Pro handles complex navigation and sensor-processing tasks, while the ESP32 manages direct hardware control. This division reduces the workload on each controller and allows the motor and steering system to respond quickly even when the Orange Pi 5 Pro is processing camera or LiDAR data.
 
 The combination of the **PixyCam2 and RPLIDAR C1** gives the robot two different types of environmental information. The camera can classify coloured objects, while the LiDAR can measure distance and detect surrounding structures. Using both sensors may improve reliability because the robot is not dependent on only one sensing method.
 
@@ -42,29 +41,26 @@ The **Ackermann steering mechanism** provides more realistic and controlled corn
 
 The **rear-wheel-drive layout** is mechanically simple and allows the front wheels to focus only on steering. This separation may make the vehicle easier to maintain, calibrate, and troubleshoot.
 
-The single-battery architecture was selected to reduce weight, wiring complexity, space requirements, and the number of potential electrical failure points. Although the robot uses a common energy source, the computing, sensor, steering, and drive systems are supplied through separate regulated power branches. This provides the practical simplicity of a single battery while reducing the risk of voltage fluctuations from the motor system affecting the Orange Pi 5 and sensors
+The single-battery architecture was selected to reduce weight, wiring complexity, space requirements, and the number of potential electrical failure points. Although the robot uses a common energy source, the computing, sensor, steering, and drive systems are supplied through separate regulated power branches. This provides the practical simplicity of a single battery while reducing the risk of voltage fluctuations from the motor system affecting the Orange Pi 5 Pro and sensors
 
 ## Current Limitations
 
-The most significant limitation is the **complexity of integrating several controllers and sensors**. The Orange Pi 5, ESP32, PixyCam2, RPLIDAR C1, motor driver, servo, and possible MPU6050 must communicate reliably. Communication delays, incorrect data formats, disconnected cables, or software crashes could affect the entire vehicle.
+The most significant limitation is the **complexity of integrating several controllers and sensors**. The Orange Pi 5 Pro, ESP32, PixyCam2, RPLIDAR C1, motor driver, and servo must communicate reliably. Communication delays, incorrect data formats, disconnected cables, or software crashes could affect the entire vehicle.
 
-The **Orange Pi 5 has relatively high power consumption** compared with a small microcontroller. It may also produce heat during continuous image processing and LiDAR data processing. The vehicle therefore requires effective voltage regulation, cooling, cable management, and power monitoring.
+The **Orange Pi 5 Pro has relatively high power consumption** compared with a small microcontroller. It may also produce heat during continuous image processing and LiDAR data processing. The vehicle therefore requires effective voltage regulation, cooling, cable management, and power monitoring.
 
-Although the dual-battery system can improve reliability, it also increases the **weight, wiring complexity, and charging requirements** of the robot. Both batteries must be secured safely, monitored separately, and checked before every run. Incorrect grounding between the two power systems could also cause communication problems.
+The **PixyCam2 may be affected by lighting conditions, reflections, shadows, and colours similar to the competition obstacles**. Its performance will depend on careful colour calibration and repeated testing under different lighting environments.
 
-The **PixyCam2 may be affected by lighting conditions**, reflections, shadows, and colours similar to the competition obstacles. Its performance will depend on careful colour calibration and repeated testing under different lighting environments.
-
-The **RPLIDAR C1 adds weight and requires a clear scanning area**. Its measurements may also be affected by vibration, reflective surfaces, incorrect mounting, or temporary obstruction by parts of the robot. Processing a large amount of LiDAR data may increase the load on the Orange Pi 5.
-
-The proposed **MPU6050 may experience sensor drift**, especially when estimating direction over a long period. It should not be used as the only source of orientation information. Its data may need filtering and correction using camera, LiDAR, or track-reference information.
+The **RPLIDAR C1 adds weight and requires a clear scanning area**. Its measurements may also be affected by vibration, reflective surfaces, incorrect mounting, or temporary obstruction by parts of the robot. Processing a large amount of LiDAR data may increase the load on the Orange Pi 5 Pro.
 
 The **MG996 servo can draw a high current**, especially when the steering mechanism is under load. It may also have mechanical backlash, which can reduce steering precision. The steering linkage must therefore be rigid, correctly aligned, and carefully calibrated.
 
 Using only one JGA25-370 drive motor creates a **single point of failure**. If the motor, gearbox, wheel connection, or motor driver fails, the vehicle cannot move. Rear-wheel drive may also experience reduced traction during rapid acceleration, sharp turning, or movement on a dusty competition surface.
 
-Finally, the chassis height of only 70 mm creates **limited internal space**. Components must be arranged carefully to prevent cable interference, overheating, blocked LiDAR scans, restricted airflow, or contact between moving steering parts and electronic components.
+Finally, the chassis height of only 55 mm creates **limited internal space**. Components must be arranged carefully to prevent cable interference, overheating, blocked LiDAR scans, restricted airflow, or contact between moving steering parts and electronic components.
 
 Overall, MOM has a strong foundation because it combines a compact mechanical platform, Ackermann steering, rear-wheel drive, high-level computing, real-time motor control, camera detection, and LiDAR sensing. Its final performance will depend on careful integration, power management, calibration, repeated testing, and simplification of any system that does not provide a clear improvement in reliability.]
+
 
 ## 2. Repository contents
 
@@ -80,11 +76,11 @@ Overall, MOM has a strong foundation because it combines a compact mechanical pl
 
 ### 3.1 Chassis
 
-The Monarch of Motion (MOM) uses a compact chassis designed specifically for the WRO Future Engineers competition. The current vehicle dimensions are approximately 250 mm in length, 170 mm in width, and 100 mm in height. These dimensions remain within the WRO maximum vehicle dimensions of 300 mm × 200 mm × 300 mm.
+The Monarch of Motion (MOM) uses a compact chassis designed specifically for the WRO Future Engineers competition. The current vehicle dimensions are approximately 290 mm x 150 mm x 135 mm. These dimensions remain within the WRO maximum vehicle dimensions of 300 mm × 200 mm × 300 mm.
 
-The relatively low vehicle height helps maintain a low centre of mass, which improves stability during cornering and reduces unnecessary body movement when the vehicle changes direction. The compact chassis also provides sufficient space for the drive system, steering mechanism, Orange Pi 5, ESP32, PixyCam2, RPLIDAR C1, batteries, and other electronic components.
+The relatively low vehicle height helps maintain a low centre of mass, which improves stability during cornering and reduces unnecessary body movement when the vehicle changes direction. The compact chassis also provides sufficient space for the drive system, steering mechanism, Orange Pi 5 Pro, ESP32, PixyCam2, RPLIDAR C1, batteries, and other electronic components.
 
-The vehicle uses a rear-wheel-drive layout with the steering mechanism located at the front. The front section contains the Ackermann steering system and provides mounting positions for navigation sensors. The Orange Pi 5, ESP32, batteries, and power electronics are positioned within the main chassis area to keep the vehicle balanced.
+The vehicle uses a rear-wheel-drive layout with the steering mechanism located at the front. The front section contains the Ackermann steering system and provides mounting positions for navigation sensors. The Orange Pi 5 Pro, ESP32, batteries, and power electronics are positioned within the main chassis area to keep the vehicle balanced.
 
 The exact chassis material, total vehicle weight, wheelbase, track width, and measured centre-of-mass position are still being finalized and will be recorded after the final mechanical design is completed.
 
@@ -92,18 +88,18 @@ Current chassis specifications:
 
 | Specification | Value |
 |---|---:|
-| Length | 237 mm |
-| Width | 145 mm |
-| Height | 90 mm |
+| Length | 290 mm |
+| Width | 150 mm |
+| Height | 135 mm |
 | Max WRO Length | 300 mm |
 | Max WRO Width | 200 mm |
 | Max WRO Height | 300 mm |
-| Vehicle Weight | 900 g |
+| Vehicle Weight | 937 g |
 | Wheelbase | 140 mm |
-| Front Track Width | 121 mm |
-| Rear Track Width | 121 mm |
+| Front Track Width | 120 mm |
+| Rear Track Width | 120 mm |
 | Chassis Material | Metal |
-| Centre of Mass | Battery area |
+| Centre of Mass | Area Containing Battery |
 
 The mounting system is designed to keep the major components securely attached while maintaining enough rigidity to prevent unwanted chassis flex. Particular attention is given to the steering mechanism and sensor mounts because movement or vibration in these areas could reduce navigation accuracy.
 
@@ -132,7 +128,7 @@ Current drive-system specifications:
 | Controller | 1 × ESP32 |
 | High-Level Controller | 1 × Orange Pi 5 Pro |
 
-The ESP32 will provide the low-level motor-control commands, while the Orange Pi 5 will determine the required vehicle movement based on information from the navigation sensors.
+The ESP32 will provide the low-level motor-control commands, while the Orange Pi 5 Pro will determine the required vehicle movement based on information from the navigation sensors.
 
 This configuration was preferred over a more complicated drivetrain because MOM requires reliable and repeatable movement rather than maximum vehicle speed.
 
@@ -142,7 +138,7 @@ MOM uses an Ackermann steering system operated by one MG996 servo motor. The use
 
 Ackermann steering allows the inner and outer front wheels to turn through different angles while cornering. The inner wheel follows a smaller turning radius than the outer wheel. This reduces tyre scrubbing and allows the vehicle to follow a smoother path through corners.
 
-The MG996 servo controls the steering linkage mechanically connected to the front wheels. The servo receives steering commands from the ESP32, while the steering target is determined by the Orange Pi 5 navigation system.
+The MG996 servo controls the steering linkage mechanically connected to the front wheels. The servo receives steering commands from the ESP32, while the steering target is determined by the Orange Pi 5 Pro navigation system.
 
 The steering system will be calibrated around three important reference positions:
 
@@ -164,37 +160,45 @@ Current steering specifications:
 | Centre Position | 90° |
 | Maximum Left Angle | 50° |
 | Maximum Right Angle | 130° |
-| Mechanical Stops | TBC |
 | Software Steering Limits | Left: 50°–90°; Right: 90°–130° |
 
 Ackermann steering was selected because the WRO track contains repeated corners and requires accurate vehicle positioning. Reduced wheel slip should provide better consistency when MOM navigates both the Open Challenge and Obstacle Challenge.
 
 ### 3.4 Torque and speed reasoning
 
-TBC
+To strike a balance between straight-line speed and torque in low-speeds for obstacle navigation and turning, we selected the JGA25-370 DC geared motor. Configured in a rear-wheel-drive layout, it has a 1.35:1 gear ratio driving our 65 mm diameter wheels.
+
+When evaluating our drivetrain options, we analyzed the distinct performance trade-offs associated with different gear ratios. Motors with higher gear ratios and low RPM outputs would have severely limited our top speed during the open challenge laps, this results in uncompetitive times on straightaways, even if we do excel in acceleration out of cornering and avoiding obstacles. On the other hand, utilizing a configuration with lower gear ratios would increase our straight line speed, but we lose important torque necessary for the car to accelerate out of corners or from rest. In practice, we risk the motor stalling during rapid directional changes, dead stops, or the fine-adjustment phase of parallel parking.
+
+MOM’s chosen setup, managed by the TB6612FNG Wemos Motor Shield, an ESP32 microcontroller, and an Orange Pi 5 Pro high-level processor, delivers what we find to be our ideal compromise. The motor provides reliable torque to overcome the static friction of the playmat and weight distribution smoothly, while keeping top speed within a competitive and stable range. The controlled speed also benefits the software, as it prevents motion blur in our PixyCam and ensures our program has ample time to turn before an obstacle or a track barrier.
 
 ### 3.5 Mechanical iterations
 
 | Version | Change | Reason | Test evidence | Result |
 |---|---|---|---|---|
-| V1 | [CHANGE] | [WHY] | [TEST] | [RESULT] |
-| V2 | [CHANGE] | [WHY] | [TEST] | [RESULT] |
-| V3 | [CHANGE] | [WHY] | [TEST] | [RESULT] |
+| V1 | Moved the RPLidar 5 cm backwards from its original position in the middle of the car. | The original position caused cable-management issues, as the wires were too close to the wheels and could interfere with their movement | Visual inspection of the component placement and cable routing. | The RPLidar was repositioned to improve cable clearance, although further adjustments were still needed to optimize the wiring. |
+| V2 | Moved the RPLidar to the front of the car. | The previous position did not provide the desired sensor placement. Moving it to the front was an attempt to improve obstacle detection, but the wiring still needed improvement | Inspection of the sensor's position and its surrounding components. | The front position was not suitable for the final layout, so the RPLidar was repositioned again in V3. |
+| V3 | Moved the RPLidar 3 cm backwards. Moved the motor driver and buck converter underneath the chassis, between the motors. Moved the battery to the top of the chassis, between the RPLidar and Orange Pi 5 Pro. | The RPLidar was repositioned to improve component placement and weight distribution. The battery was moved to the top for easier replacement, while the motor driver and buck converter were moved underneath the chassis to improve cable management. | Inspection of component placement, wiring arrangement, and battery accessibility. | The new layout improved component organization and made the battery easier to access. Further driving tests would be needed to confirm improvements in stability. |
+| V3.1 | Moved the PixyCam 2 to the top of the RPLidar. | Its original position at the front exposed it to potential collisions and limited its view of the ground. Moving it above the RPLidar was intended to improve ground-line visibility. | Inspection of the camera's mounting position and viewing angle. | The new position was intended to provide a clearer view of the ground and reduce the risk of direct collisions. Further testing would be needed to confirm improvements in line detection |
 
 ## 4. Power and sensor architecture
 
 ### 4.1 Power system
-TBC
+MOM needs a reliable, stable, and high-performance power supply for its onboard microcontrollers, high-level computer, sensors, and drive actuators. As a result, we chose to equip it with a 1500mAh 3S 130C Lithium Polymer (LiPo) battery. Selecting a 3-cell configuration provides a voltage of 11.1V, however this goes up to 12.6V when fully charged. This voltage level is ideal for directly supplying our motor shield and drive motor, while offering a clean, efficient higher-voltage source that can be stepped down safely to power our logic components.
+
+The 1500mAh capacity balances the power needed for operational runtime and physical weight. There is sufficient capacity to last for multiple testing or competition runs without needing constant recharging while keeping the vehicle's center of gravity and mass low. The battery's high 130C discharge rating also ensures an extremely low internal resistance and a large current headroom. In this category, aggressive accelerations from a dead stop, rapid direction reversals, and sudden motor load spikes can cause severe voltage dips on standard batteries. The 130C rating means that current delivery will remain instantaneous and rock-solid. This protects our sensitive microcontrollers such as our ESP32 and Orange Pi 5 Pro from brownouts or sudden reboots.
+
 
 ### 4.2 Power budget
-| Component | Voltage | Typical Current | Maximum / Peak Current | Power Source |
-|---|---:|---:|---:|---|
-| Orange Pi 5 Pro | 5 V | TBC | 4 A supply capacity | Buck Converter (5 V) |
-| ESP32 | 3.3 V | TBC | TBC | Buck Converter (5 V) |
-| MG996 Servo | 6 V | ~500 mA | ~2.5 A | Buck Converter (6 V) |
-| JGA25-370 Motor | 6 V | TBC | TBC | Buck Converter (6 V) |
-| PixyCam2 | 5 V | ~140 mA | TBC | Orange Pi 5 Pro |
-| RPLIDAR C1 | 5 V | ~230 mA | ~260 mA operating / ~800 mA startup | Orange Pi 5 Pro |
+| Component | Operating Voltage | Typical Operating Current | Maximum / Peak Current | Power Source |
+| :--- | :--- | :--- | :--- | :--- |
+| **Orange Pi 5 Pro** | 5 V DC | ~1.0 A – 2.5 A (5 W – 12 W) | ~4.0 A (under max stress) | Buck Converter (5 V / 5 A) |
+| **ESP32 (Dev Board)** | 5 V (VIN pin) / 3.3 V (internal) | ~80 mA – 150 mA | ~350 mA – 500 mA (RF bursts) | Buck Converter (5 V) |
+| **MG996R Servo** | 4.8 V – 7.2 V (6 V recommended) | ~500 mA – 900 mA | ~2.5 A (Stall Current @ 6V) | Buck Converter (6 V / 3 A) |
+| **JGA25-370 Motor** | 6 V – 12 V DC (12 V nominal) | ~50 mA – 150 mA (no load) | ~1.2 A – 2.0 A (Stall Current) | Motor Driver fed by Buck Converter / Battery |
+| **PixyCam2** | 5 V DC | ~140 mA | ~300 mA – 400 mA (LED on) | Orange Pi 5 Pro USB (5 V) |
+| **RPLIDAR C1** | 5 V DC | ~230 mA (operating) | ~260 mA (operating) / ~800 mA (startup pulse) | Orange Pi 5 Pro USB (5 V) |
+
 
 ### 4.3 Sensors and placement
 
@@ -203,7 +207,6 @@ MOM uses multiple sensors because different sensors provide different types of e
 |---|---|---|---|---|
 | [PixyCam2] | [Detect coloured obstacles, visual track features, and navigation markers] | [In the front of chassi] | [TBC] | [Performs fast colour/object processing and reduces processing demand on Orange Pi 5] |
 | [SLAMTEC RPLIDAR C1] | [Measure surrounding distances, detect walls, estimate track position, and support obstacle avoidance] | [at the front of chassis and ontop of PixyCam 2] | [TBC] | [Provides wide-area distance scanning instead of measurements from only a few fixed directions] |
-| [ENCODER/IMU] | [PURPOSE] | [POSITION] | [INTERFACE] | [REASON] |
 
 ### 4.4 Sensor calibration
 Reliable autonomous navigation requires each sensing and control system to be calibrated before competition.
@@ -214,12 +217,7 @@ The PixyCam2 will be calibrated to recognise the colours and objects required by
 
 Calibration will include:
 
-defining colour signatures;
-adjusting colour thresholds;
-verifying recognition distance;
-testing different object positions;
-checking false detections;
-testing under different lighting conditions.
+defining colour signatures; adjusting colour thresholds; verifying recognition distance; testing different object positions; checking false detections; testing under different lighting conditions.
 
 Lighting is particularly important because changes in brightness, shadows, reflections, and colour temperature can affect visual recognition.
 
@@ -229,33 +227,38 @@ RPLIDAR C1 Calibration
 
 LiDAR calibration will include checking:
 
-measured distance against known physical distances;
-mounting orientation;
-angular reference position;
-minimum useful detection distance;
-measurement repeatability;
-areas blocked by the robot chassis.
+measured distance against known physical distances; mounting orientation; angular reference position; minimum useful detection distance; measurement repeatability; areas blocked by the robot chassis.
 
 Any systematic offset discovered during testing can be corrected in software.
 
 Steering Calibration
 
-TBC
+Servo Horn Alignment and Center Point: The steering servo is centered mechanically by ensuring the servo horn is perpendicular to the steering linkage at a 90-degree pulse width (typically 1500 microseconds).
+
+End-Point Limitation (PWM Bounds): We define maximum left and right steering angles in software to prevent mechanical binding, over-extension, or strain on the steering linkage and servo gear train.
+
+Ackermann Steering Geometry Verification: The turning radius and steering arm linkages are physically inspected and tested to ensure smooth cornering response without wheel slip during tight maneuvers.
+
+Verification: Command the steering to 0 degrees (center), left limit, and right limit via code, then visually check that the wheels align precisely to the target angles without motor humming or mechanical binding.
 
 Drive Calibration
+Drive Calibration must include the following:
+Determining the minimum PWM signal required to overcome static friction and initiate motor rotation, ensuring zero-command signals result in a complete stop.
 
-TBC
+Calibrating the relationship between throttle input (PWM) and actual physical movement is tested across low, medium, and high duty cycles to ensure predictable acceleration profiles.
 
-Encoder Calibration
+Verify these calibrations by slowly ramping up the motor PWM value from zero until the rear wheels begin continuous rotation, and record this threshold value to eliminate lag in the control code.
 
-TBC
+Data Storage Calibration
+Data Storage calibration must include:
+Ensuring all calibration constants—including steering trim offsets, minimum PWM thresholds, HSV color thresholds, and encoder ticks-per-meter—are stored locally in the ESP32's flash memory using Non-Volatile Storage (NVS) libraries.
 
-Calibration Data Storage
+Confirm that parameters are saved in structured configuration files or parameter dictionaries so they can be easily tuned, updated, or re-flashed without requiring structural changes to the core navigation codebase.
 
-TBC
+Verifying by power-cycling the microcontroller after saving new calibration parameters, then reading back the stored values via the serial monitor to confirm data persistence.
 
 ### 4.5 Wiring
-The Monarch of Motion (MOM) uses a distributed electronic architecture consisting of an Orange Pi 5, ESP32, PixyCam2, SLAMTEC RPLIDAR C1, JGA25-370 drive motor, MG996 steering servo, and a dual-battery power system.
+The Monarch of Motion (MOM) uses a distributed electronic architecture consisting of an Orange Pi 5, ESP32, PixyCam2, SLAMTEC RPLIDAR C1, JGA25-370 drive motor, MG996 steering servo, and a single-battery power system.
 
 The wiring documentation is stored in:
 
@@ -274,9 +277,8 @@ MOM uses a two-controller architecture.
 |---|---|---|---|---|
 | High-level control | Orange Pi 5 | Navigation, sensor processing, decision-making, parking strategy, and system coordination | Python | Visual Studio Code |
 | Low-level control | ESP32 | Drive motor control, steering control, and direct hardware interfacing | TBC | Visual Studio Code / ESP32 development environment |
-| Visual sensing | PixyCam2 | Colour and object recognition | PixyCam firmware + Orange Pi interface | PixyCam tools / Python interface |
-| Distance sensing | RPLIDAR C1 | 2D environmental distance scanning | Python interface | Visual Studio Code |
-| IMU, if used | MPU6050 | Angular motion and acceleration measurement | Python / ESP32 interface — TBC | TBC |
+| Visual sensor | PixyCam2 | Colour and object recognition | PixyCam firmware + Orange Pi interface | PixyCam tools / Python interface |
+| Distance sensor | RPLIDAR C1 | 2D environmental distance scanning | Python interface | Visual Studio Code |
 
 The Orange Pi 5 acts as the main decision-making computer, while the ESP32 acts as the real-time hardware controller.
 
@@ -315,11 +317,19 @@ When PixyCam2 has not recently identified a red or green obstacle, LiDAR acts as
 
 ### 5.4 Open Challenge strategy
 
-TBC  
+For the Open Challenge, M.O.M. will rely primarily on the RPLIDAR C1 to make turning decisions. The LiDAR continuously measures distances around the robot. When readings indicate that the forward path is blocked, the control program compares the available space on the left and right and turns toward the clearer side, provided that side has enough measured clearance. If neither side appears sufficiently clear, the robot briefly reverses and stops rather than turning toward an uncertain path.
+
+The PixyCam2 has a supporting role: it detects the orange corner markers so the program can track progress around the course. The robot counts the markers as corners, groups four corners into a lap, and stops when it reaches its configured lap target. In this strategy, visual marker detection supports course-progress tracking, while LiDAR provides the distance information used to select turns.
+
+During a LiDAR-based turn, M.O.M. continues checking the front path and returns to normal driving when the path is detected as clear. A close-obstacle check also triggers a brief reverse when an object is detected within the emergency distance threshold.
 
 ### 5.5 Obstacle Challenge strategy
 
-TBC
+M.O.M.’s Obstacle Challenge strategy is to navigate the course using a reactive combination of camera and LiDAR data. The main program, fusion_main.py, continuously reads color detections from the PixyCam2 and distance readings from the RPLIDAR. The camera is used to recognize colored course objects and markers, while LiDAR provides distance information about obstacles and nearby open space.
+
+When the PixyCam2 detects a red or green obstacle, the robot waits for repeated detections to reduce the chance of reacting to a single false reading. It then estimates the obstacle’s distance and position using pixy_calculations.py and plans a pass-by maneuver. The current code maps red obstacles to a left turn and green obstacles to a right turn. If the obstacle is too close for the maneuver, the robot reverses briefly before turning. It holds the selected turn through temporary camera dropouts, then drives straight briefly before resuming normal navigation.
+
+LiDAR acts as a fallback when the camera has not recently identified a red or green obstacle. If the forward path is blocked, M.O.M. compares the measured clearance on each side and turns toward a side with enough space. If an obstacle is detected at very close range, the program commands a brief reverse. Meanwhile, orange and blue marker detections are used to count course corners; four corners make one lap, and the current program stops after three laps.
 
 ### 5.6 Control algorithms
 
@@ -497,5 +507,110 @@ Switch off the computing power.
 
 Any abnormal sensor or communication condition should result in the vehicle remaining stopped or entering the defined fault state.
 
-### 7.5 Testing and Engineering Validation
+###8. Testing and Engineering Validation
+Testing was conducted to evaluate the performance of The Monarch of Motion (MOM), focusing on autonomous navigation, lap time, obstacle detection, steering, computing performance, and battery runtime. Parking and some additional tests remain incomplete because the robot has not yet progressed far enough through the course.
 
+###8.1 Testing Results
+| Test | Method | Runs | Metric | Result | Design Action |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Autonomous Laps** | Operated the robot on the track and observed its ability to complete laps autonomously. | 3 laps before stopping | Number of laps completed | The robot successfully completed 3 laps before stopping. Successful runs were consistent once the robot completed its intended movement. | Continue testing to evaluate reliability over longer runs and investigate why the robot stops after 3 laps. |
+| **Lap Time** | Measured the time required to complete laps with and without obstacles. | 3 laps | Lap time (in minutes and seconds) | The robot completed a lap in approximately 2 minutes 20 seconds with obstacles and 1 minute 40 seconds without obstacles. | Improve navigation and obstacle-avoidance efficiency while maintaining reliable movement. |
+| **Obstacle Detection** | Observed the robot's response to obstacles and checked PixyCam 2 line detection. | Observational testing | Obstacle detection reliability | The robot occasionally had difficulty detecting green obstacles. Some obstacles were outside the PixyCam 2's field of view. | Raised the PixyCam 2 to improve its viewing angle and visibility of the track. Further testing is needed to evaluate the improvement. |
+| **Parking Accuracy** | Planned test involving autonomous entry into the designated parking area. | Not tested | Successful parking attempts | Not tested because the robot had not progressed far enough through the course to reach the parking stage. | Conduct parking tests once the robot can reliably complete the preceding sections of the course. |
+| **Steering Performance** | Observed the robot's movement during left and right turns. | Observational testing | Ability to turn left and right | The robot can turn both left and right smoothly during observed operation. Reverse movement is available for repositioning when needed. | Continue testing turns on different sections of the track and adjust steering if inconsistencies occur. |
+| **CPU Performance** | Observed the Orange Pi 5 Pro during robot operation. | Observational testing | Operational stability | No obvious CPU-related issues were observed during testing. CPU temperature and utilization were not formally measured. | Monitor CPU temperature and utilization during longer runs to confirm stable performance. |
+| **Battery Runtime** | Observed the operating duration of the robot under normal usage. | Approximate observation | Operating time | The battery lasts approximately 1–2 hours, depending on operating conditions. | Record the runtime under a consistent condition to obtain a more accurate measurement. |
+| **Lighting Conditions** | Used the PixyCam 2's built-in illumination during camera operation. | Observational testing | Line-detection performance | The PixyCam 2 uses its built-in lights to assist with visual detection. Performance under different ambient lighting conditions has not been formally measured. | Test the camera under different lighting conditions to evaluate detection consistency. |
+
+###8.2 Evaluation
+The results show that MOM can navigate the track, complete three laps, and perform left and right turns. The robot also demonstrates an approximate operating duration of 1–2 hours. However, obstacle detection remains an area for improvement, particularly when green obstacles are difficult for the PixyCam 2 to detect or fall outside its field of view.
+
+To address this issue, the PixyCam 2 was raised to provide a better viewing angle. Further testing is required to determine whether this modification improves detection reliability. Parking accuracy has not yet been evaluated, and CPU performance and lighting reliability require more systematic measurements.
+
+Future testing will focus on improving obstacle detection, investigating why the robot stops after three laps, and completing the parking stage. Additional repeated trials will help establish the robot's overall reliability and identify any remaining mechanical or software issues.
+
+###9. Team Photographs
+
+###10. Demonstration Video
+Obstacle Challenge: https://youtu.be/pocv_oZRLDY?si=IsaJ_077Tx5AAPqb 
+Open Challenge: https://youtu.be/Bs01NPYAT9w?si=0yIeKBt1mM5cC5jw 
+
+###11. Engineering Journal
+11. Engineering Journal
+Engineering Journal — The Monarch of Motion (MOM)
+
+June 29, 2026 — Chassis Kit Assembly
+We began developing The Monarch of Motion (MOM) by assembling the chassis kit, which would serve as the mechanical foundation of our autonomous robot. The chassis provided the structure on which the motors, wheels, sensors, battery, and electronic components would eventually be mounted. Completing the initial assembly allowed us to begin planning the robot's component arrangement while considering the available space, cable routing, and weight distribution. These factors were important because the robot needed to remain within the WRO Future Engineers size requirements while maintaining sufficient stability for autonomous driving.
+
+July 6, 2026 — Initial Wiring Diagram
+After assembling the chassis, we began planning the robot's electrical system by creating an initial wiring diagram. The diagram outlined how the electronic components would connect and helped us organize the power and signal connections before physically wiring the robot. Our system would include the Orange Pi 5 Pro, RPLidar, PixyCam 2, motor driver, buck converter or converters, and other components required for autonomous operation. Planning the connections in advance gave us a reference to follow during assembly and helped us identify how the different parts of the system would work together.
+
+July 11, 2026 — Initial Component Weight Measurement
+We measured the initial mass of the chassis assembly and recorded a weight of 776 g. We also considered the weight of the RPLidar and battery when evaluating how much additional mass the robot could accommodate. This was important for planning the placement of the remaining electronic components and ensuring that the completed robot would satisfy the competition's dimensional constraints. Establishing an initial weight measurement also gave us a reference for assessing the mass of the robot as more components were added.
+
+July 13, 2026 — Finalization of the Wiring Diagram
+We revised the initial wiring diagram by adding labels to make the connections between components clearer and easier to follow. During this revision, we also changed the power distribution design to use two buck converters instead of one. This required us to account for the updated arrangement in the wiring plan before proceeding with the physical assembly. Finalizing the diagram helped establish a more organized reference for soldering and connecting the electronic components in the following stages.
+
+July 14, 2026 — Initial PixyCam 2 Training
+We began experimenting with the PixyCam 2 to understand how its color-recognition system worked and how it could support the robot's navigation. During this session, we familiarized ourselves with the camera's training process and successfully configured it to recognize red and green objects. These initial experiments allowed us to explore its visual detection capabilities and understand how color information could be used to distinguish objects in the robot's environment.
+
+July 18, 2026 — Autonomous Navigation Algorithm Development
+We began developing the robot's navigation algorithm, focusing on how the robot would interpret RPLidar readings and translate them into movement decisions. Tasks were divided among team members so that different parts of the system could be developed in parallel. We worked on the motor-steering angles and the logic required to detect obstacles and determine how the robot should respond. This stage established the foundation for autonomous movement, in which the robot would use sensor information to navigate the track rather than relying on continuous manual control.
+
+July 19, 2026 — PixyCam 2 Color-Detection Training
+We continued training the PixyCam 2 to recognize the colored objects used in our testing environment. By the end of the session, the camera could detect red and green LEGO blocks. This demonstrated that the camera could distinguish the selected colors and provided a foundation for using visual information during autonomous navigation. The PixyCam 2 would complement the RPLidar, which provides distance measurements rather than color identification, allowing the two sensors to contribute different types of information to the robot's navigation system.
+
+July 25, 2026 — Track Preparation and Motor Grip Testing
+We obtained a printed WRO competition track map to prepare for testing the robot's movement and motor grip. The purpose was to investigate how the wheels would perform on the track surface and whether they could maintain sufficient traction during movement. However, we could not conduct the planned test because there was insufficient space for the testing setup. Consequently, the motor grip evaluation was postponed until a suitable testing environment could be arranged.
+
+July 26, 2026 — RPLidar Simulation Testing
+We successfully connected the RPLidar to a simulator and investigated how it detected objects in its surroundings. Using a simulator allowed us to observe the sensor's readings without depending entirely on the completed physical robot. During this session, we identified a limitation involving transparent objects, which were not reliably detected. This was an important observation because the robot's obstacle-avoidance system depended on receiving sufficiently reliable distance information. Objects that the sensor could not detect consistently could potentially cause the navigation algorithm to make incorrect movement decisions.
+
+August 1, 2026 — Soldering the Power Connections
+We began soldering the robot's electrical connections, focusing on the wiring between the buck converter and the Orange Pi 5 Pro. These connections were necessary to integrate the power supply with the robot's computing system. We followed the previously prepared wiring diagram to guide the physical connections and maintain consistency between the planned circuit and the assembled hardware. This marked an important step in transitioning from the electrical design stage to the physical integration of the robot's electronic components.
+
+August 2, 2026 — Orange Pi 5 Pro and PCB Integration
+We continued assembling the electronic system by soldering the connections between the Orange Pi 5 Pro and the printed circuit board (PCB). The wires were connected according to the finalized wiring diagram, which served as the reference for the physical implementation. Integrating the computing board with the PCB was necessary to bring the planned electrical system together and prepare the hardware for subsequent assembly and testing.
+
+August 5, 2026 — Assembly of Version 1 (V1)
+We assembled the first version of the robot by securing the PCB and Orange Pi 5 Pro to the chassis using adhesive. The RPLidar was initially positioned near the middle of the car. However, the arrangement required further consideration because the wiring was close to the wheels and could potentially interfere with their movement. This highlighted the importance of evaluating the physical layout of the components alongside the electrical design. V1 provided our first assembled prototype and a starting point for identifying mechanical issues that needed to be addressed before more extensive testing.
+
+
+August 14, 2026 — Preparation for RPLidar Testing
+We obtained walls to construct an obstacle-testing environment for the RPLidar. The planned tests were intended to investigate the sensor's ability to detect track boundaries and obstacles at different heights. However, the robot was still incomplete, so we could not carry out the intended testing session. We postponed the evaluation until the physical assembly was sufficiently complete to allow meaningful testing of the sensor in relation to the robot's actual dimensions and mounting position.
+
+August 15, 2026 — Construction of a Makeshift Testing Track
+We constructed a makeshift track to begin evaluating the RPLidar's functionality in a physical environment. We used walls to investigate how the sensor detected boundaries at different heights and how their positions affected its readings. This allowed us to move beyond simulator-based observations and examine the sensor's behavior in relation to the robot's physical configuration. The observations from this testing session provided information that could be used to evaluate the sensor's mounting position and the robot's ability to detect its surroundings.
+
+August 19, 2026 — Mechanical Issues with the RPLidar Mount (V2 Development)
+During development, we repositioned the RPLidar toward the front of the car, creating the V2 configuration. This change was intended to explore a more suitable sensor position for obstacle detection. However, the front-mounted arrangement introduced additional mechanical considerations, particularly concerning the acrylic platform supporting the sensor and the available clearance around the chassis. During testing, we observed that the robot could become stuck against this platform, indicating that the mounting structure interfered with its movement. This demonstrated that sensor placement needed to account not only for detection coverage but also for the physical clearance required for the robot to navigate the track.
+
+August 19, 2026 — Investigation of RPLidar Navigation Issues
+During autonomous navigation testing, we also observed that the robot's RPLidar-based navigation algorithm could cause it to turn in the wrong direction in certain situations. We identified issues with the geometric calculations used to interpret sensor readings and determine the appropriate turning direction. In addition, the robot needed to update obstacle information more frequently and respond with faster turning movements. These findings showed that reliable navigation depended on both the quality of the sensor data and the accuracy of the algorithm interpreting that data. The problem therefore required further development of the robot's navigation logic.
+
+August 24, 2026 — Mechanical Reassembly and Version 3 (V3)
+We disassembled and rebuilt the robot to improve component placement and overall mechanical efficiency. During this redesign, we moved the RPLidar 3 cm backwards from its front-mounted position in V2 to revise the sensor layout and weight distribution. We also moved the motor driver and buck converter underneath the chassis, between the motors, to improve cable routing and organize the electronic components more efficiently. The battery was relocated to the top of the chassis, between the RPLidar and Orange Pi 5 Pro, to make it easier to access and replace. These changes established the V3 configuration and addressed several practical considerations identified during earlier assembly and testing.
+
+August 25, 2026 — Autonomous Navigation and Obstacle Challenge Testing
+We tested the robot on an obstacle-challenge track to evaluate how the PixyCam 2 and RPLidar worked together during autonomous navigation. The RPLidar provided distance information about surrounding obstacles, while the PixyCam 2 supplied visual information through color detection. Testing the sensors together allowed us to observe how the robot responded to the track environment and whether the combined sensing system supported its movement decisions. During testing, we identified occasional difficulties detecting green obstacles, particularly when they were outside the PixyCam 2's field of view. This indicated that the camera's mounting position and viewing angle required further consideration.
+
+August 25–September 1, 2026 — PixyCam 2 Repositioning and Version 3.1 (V3.1)
+Following the obstacle-challenge testing, we repositioned the PixyCam 2 from the front of the robot to the top of the RPLidar, creating the V3.1 configuration. Its original position at the front exposed the camera to potential collisions and limited its view of the ground. Mounting the camera above the RPLidar was intended to provide a clearer viewing angle for ground-line detection while reducing the risk of direct physical interference. This modification was also intended to help address the detection difficulties observed during testing. However, further testing was still necessary to determine whether the revised mounting position improved line detection and the recognition of green obstacles.
+
+September 1, 2026 — Navigation Logic Improvements
+We modified the robot's code to account for a scenario that had previously caused problems during autonomous operation. Earlier testing had revealed issues with the RPLidar-based navigation logic, including incorrect turning behavior caused by geometric calculations. The robot also needed to update obstacle information more frequently and respond with faster turning movements. This software revision was intended to improve the robot's decision-making when responding to the track environment. The updated code would need to be tested again to determine whether it resolved the original issue and whether any additional adjustments were necessary.
+
+###12. Credits and External Resource
+https://youtu.be/ulTM1uV1Bvg?si=4LF2zQf9gxllorqJ <- car assembly kit
+
+MOM’s programming utilizes several external libraries to allow it to function:
+| Library / package | Used for | Where it appears |
+| :--- | :--- | :--- |
+| **PySerial** (`serial`) | Serial communication with the chassis and port discovery. | `serial_chassis.py`, `serial_utils.py` |
+| **Pixy2 Python library** (`pixy`) | Reading color-block detections from the PixyCam2. | `scan_pixy.py`, `pixy_reader.py` |
+| **RPLIDAR driver** (`rplidarc1`) | Connecting to the RPLIDAR and reading scan data. | `scan_lidar.py` |
+
+The project also uses Python’s standard library—for example, asyncio, pickle, argparse, and logging—and its own modules such as pixy_calculations.py.
+
+###13. Contact
+Teacher Email: nikhil.dsouza@binus.edu

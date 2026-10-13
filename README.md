@@ -205,8 +205,8 @@ The 1500mAh capacity balances the power needed for operational runtime and physi
 MOM uses multiple sensors because different sensors provide different types of environmental information.
 | Sensor | Purpose | Position | Interface | Why selected |
 |---|---|---|---|---|
-| [PixyCam2] | [Detect coloured obstacles, visual track features, and navigation markers] | [In the front of chassi] | [TBC] | [Performs fast colour/object processing and reduces processing demand on Orange Pi 5] |
-| [SLAMTEC RPLIDAR C1] | [Measure surrounding distances, detect walls, estimate track position, and support obstacle avoidance] | [at the front of chassis and ontop of PixyCam 2] | [TBC] | [Provides wide-area distance scanning instead of measurements from only a few fixed directions] |
+| [PixyCam2] | [Detect coloured obstacles, visual track features, and navigation markers] | [In the front of chassi] | [USB connection to the Orange Pi; the program reads color detections using the Pixy2 camera library.] | [Performs fast colour/object processing and reduces processing demand on Orange Pi 5] |
+| [SLAMTEC RPLIDAR C1] | [Measure surrounding distances, detect walls, estimate track position, and support obstacle avoidance] | [at the front of chassis and ontop of PixyCam 2] | [USB serial connection to the Orange Pi; the program reads scans through the LiDAR driver at 460800 baud.] | [Provides wide-area distance scanning instead of measurements from only a few fixed directions] |
 
 ### 4.4 Sensor calibration
 Reliable autonomous navigation requires each sensing and control system to be calibrated before competition.
@@ -276,7 +276,7 @@ MOM uses a two-controller architecture.
 | System | Controller | Role | Language | Development Environment |
 |---|---|---|---|---|
 | High-level control | Orange Pi 5 | Navigation, sensor processing, decision-making, parking strategy, and system coordination | Python | Visual Studio Code |
-| Low-level control | ESP32 | Drive motor control, steering control, and direct hardware interfacing | TBC | Visual Studio Code / ESP32 development environment |
+| Low-level control | ESP32 | Drive motor control, steering control, and direct hardware interfacing | C++ | Visual Studio Code / ESP32 development environment |
 | Visual sensor | PixyCam2 | Colour and object recognition | PixyCam firmware + Orange Pi interface | PixyCam tools / Python interface |
 | Distance sensor | RPLIDAR C1 | 2D environmental distance scanning | Python interface | Visual Studio Code |
 

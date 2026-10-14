@@ -9,6 +9,7 @@ Engineering Decisions
 
 Engineering Journal
 June 29, 2026 — Chassis Kit Assembly We began developing The Monarch of Motion (MOM) by assembling the chassis kit, which would serve as the mechanical foundation of our autonomous robot.
+
 <img width="158" height="249" alt="image" src="https://github.com/user-attachments/assets/2195dbbf-9525-4178-bb3e-d77af79e30bf" />
 
 The chassis provided the structure on which the motors, wheels, sensors, battery, and electronic components would eventually be mounted. Completing the initial assembly allowed us to begin planning the robot's component arrangement while considering the available space, cable routing, and weight distribution. These factors were important because the robot needed to remain within the WRO Future Engineers size requirements while maintaining sufficient stability for autonomous driving.

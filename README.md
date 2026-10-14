@@ -173,13 +173,7 @@ When evaluating our drivetrain options, we analyzed the distinct performance tra
 MOM’s chosen setup, managed by the TB6612FNG Wemos Motor Shield, an ESP32 microcontroller, and an Orange Pi 5 Pro high-level processor, delivers what we find to be our ideal compromise. The motor provides reliable torque to overcome the static friction of the playmat and weight distribution smoothly, while keeping top speed within a competitive and stable range. The controlled speed also benefits the software, as it prevents motion blur in our PixyCam and ensures our program has ample time to turn before an obstacle or a track barrier.
 
 ### 3.5 Mechanical iterations
-
-| Version | Change | Reason | Test evidence | Result |
-|---|---|---|---|---|
-| V1 | Moved the RPLidar 5 cm backwards from its original position in the middle of the car. | The original position caused cable-management issues, as the wires were too close to the wheels and could interfere with their movement | Visual inspection of the component placement and cable routing. | The RPLidar was repositioned to improve cable clearance, although further adjustments were still needed to optimize the wiring. |
-| V2 | Moved the RPLidar to the front of the car. | The previous position did not provide the desired sensor placement. Moving it to the front was an attempt to improve obstacle detection, but the wiring still needed improvement | Inspection of the sensor's position and its surrounding components. | The front position was not suitable for the final layout, so the RPLidar was repositioned again in V3. |
-| V3 | Moved the RPLidar 3 cm backwards. Moved the motor driver and buck converter underneath the chassis, between the motors. Moved the battery to the top of the chassis, between the RPLidar and Orange Pi 5 Pro. | The RPLidar was repositioned to improve component placement and weight distribution. The battery was moved to the top for easier replacement, while the motor driver and buck converter were moved underneath the chassis to improve cable management. | Inspection of component placement, wiring arrangement, and battery accessibility. | The new layout improved component organization and made the battery easier to access. Further driving tests would be needed to confirm improvements in stability. |
-| V3.1 | Moved the PixyCam 2 to the top of the RPLidar. | Its original position at the front exposed it to potential collisions and limited its view of the ground. Moving it above the RPLidar was intended to improve ground-line visibility. | Inspection of the camera's mounting position and viewing angle. | The new position was intended to provide a clearer view of the ground and reduce the risk of direct collisions. Further testing would be needed to confirm improvements in line detection |
+Mechanical Iterations can be found in Docs/engineering-decisions.md
 
 ## 4. Power and sensor architecture
 
@@ -536,7 +530,7 @@ MOM's Team Photographs can be found in the t-photo.txt file in the repository
 MOM's Demonstration Video can be found in the Docs folder under team_videos.md
 
 ###11. Engineering Journal
-MOM's Engineering Journal can be found in the Docs folder under engineering_journal.md
+Mechanical Iterations can be found in Docs/engineering-decisions.md
 
 ###12. Credits and External Resource
 https://youtu.be/ulTM1uV1Bvg?si=4LF2zQf9gxllorqJ <- car assembly kit

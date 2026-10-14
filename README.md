@@ -530,75 +530,13 @@ To address this issue, the PixyCam 2 was raised to provide a better viewing angl
 Future testing will focus on improving obstacle detection, investigating why the robot stops after three laps, and completing the parking stage. Additional repeated trials will help establish the robot's overall reliability and identify any remaining mechanical or software issues.
 
 ###9. Team Photographs
+MOM's Team Photographs can be found in the t-photo.txt file in the repository
 
 ###10. Demonstration Video
-Obstacle Challenge: https://youtu.be/pocv_oZRLDY?si=IsaJ_077Tx5AAPqb 
-Open Challenge: https://youtu.be/Bs01NPYAT9w?si=0yIeKBt1mM5cC5jw 
+MOM's Demonstration Video can be found in the Docs folder under team_videos.md
 
 ###11. Engineering Journal
-11. Engineering Journal
-Engineering Journal — The Monarch of Motion (MOM)
-
-June 29, 2026 — Chassis Kit Assembly
-We began developing The Monarch of Motion (MOM) by assembling the chassis kit, which would serve as the mechanical foundation of our autonomous robot. The chassis provided the structure on which the motors, wheels, sensors, battery, and electronic components would eventually be mounted. Completing the initial assembly allowed us to begin planning the robot's component arrangement while considering the available space, cable routing, and weight distribution. These factors were important because the robot needed to remain within the WRO Future Engineers size requirements while maintaining sufficient stability for autonomous driving.
-
-July 6, 2026 — Initial Wiring Diagram
-After assembling the chassis, we began planning the robot's electrical system by creating an initial wiring diagram. The diagram outlined how the electronic components would connect and helped us organize the power and signal connections before physically wiring the robot. Our system would include the Orange Pi 5 Pro, RPLidar, PixyCam 2, motor driver, buck converter or converters, and other components required for autonomous operation. Planning the connections in advance gave us a reference to follow during assembly and helped us identify how the different parts of the system would work together.
-
-July 11, 2026 — Initial Component Weight Measurement
-We measured the initial mass of the chassis assembly and recorded a weight of 776 g. We also considered the weight of the RPLidar and battery when evaluating how much additional mass the robot could accommodate. This was important for planning the placement of the remaining electronic components and ensuring that the completed robot would satisfy the competition's dimensional constraints. Establishing an initial weight measurement also gave us a reference for assessing the mass of the robot as more components were added.
-
-July 13, 2026 — Finalization of the Wiring Diagram
-We revised the initial wiring diagram by adding labels to make the connections between components clearer and easier to follow. During this revision, we also changed the power distribution design to use two buck converters instead of one. This required us to account for the updated arrangement in the wiring plan before proceeding with the physical assembly. Finalizing the diagram helped establish a more organized reference for soldering and connecting the electronic components in the following stages.
-
-July 14, 2026 — Initial PixyCam 2 Training
-We began experimenting with the PixyCam 2 to understand how its color-recognition system worked and how it could support the robot's navigation. During this session, we familiarized ourselves with the camera's training process and successfully configured it to recognize red and green objects. These initial experiments allowed us to explore its visual detection capabilities and understand how color information could be used to distinguish objects in the robot's environment.
-
-July 18, 2026 — Autonomous Navigation Algorithm Development
-We began developing the robot's navigation algorithm, focusing on how the robot would interpret RPLidar readings and translate them into movement decisions. Tasks were divided among team members so that different parts of the system could be developed in parallel. We worked on the motor-steering angles and the logic required to detect obstacles and determine how the robot should respond. This stage established the foundation for autonomous movement, in which the robot would use sensor information to navigate the track rather than relying on continuous manual control.
-
-July 19, 2026 — PixyCam 2 Color-Detection Training
-We continued training the PixyCam 2 to recognize the colored objects used in our testing environment. By the end of the session, the camera could detect red and green LEGO blocks. This demonstrated that the camera could distinguish the selected colors and provided a foundation for using visual information during autonomous navigation. The PixyCam 2 would complement the RPLidar, which provides distance measurements rather than color identification, allowing the two sensors to contribute different types of information to the robot's navigation system.
-
-July 25, 2026 — Track Preparation and Motor Grip Testing
-We obtained a printed WRO competition track map to prepare for testing the robot's movement and motor grip. The purpose was to investigate how the wheels would perform on the track surface and whether they could maintain sufficient traction during movement. However, we could not conduct the planned test because there was insufficient space for the testing setup. Consequently, the motor grip evaluation was postponed until a suitable testing environment could be arranged.
-
-July 26, 2026 — RPLidar Simulation Testing
-We successfully connected the RPLidar to a simulator and investigated how it detected objects in its surroundings. Using a simulator allowed us to observe the sensor's readings without depending entirely on the completed physical robot. During this session, we identified a limitation involving transparent objects, which were not reliably detected. This was an important observation because the robot's obstacle-avoidance system depended on receiving sufficiently reliable distance information. Objects that the sensor could not detect consistently could potentially cause the navigation algorithm to make incorrect movement decisions.
-
-August 1, 2026 — Soldering the Power Connections
-We began soldering the robot's electrical connections, focusing on the wiring between the buck converter and the Orange Pi 5 Pro. These connections were necessary to integrate the power supply with the robot's computing system. We followed the previously prepared wiring diagram to guide the physical connections and maintain consistency between the planned circuit and the assembled hardware. This marked an important step in transitioning from the electrical design stage to the physical integration of the robot's electronic components.
-
-August 2, 2026 — Orange Pi 5 Pro and PCB Integration
-We continued assembling the electronic system by soldering the connections between the Orange Pi 5 Pro and the printed circuit board (PCB). The wires were connected according to the finalized wiring diagram, which served as the reference for the physical implementation. Integrating the computing board with the PCB was necessary to bring the planned electrical system together and prepare the hardware for subsequent assembly and testing.
-
-August 5, 2026 — Assembly of Version 1 (V1)
-We assembled the first version of the robot by securing the PCB and Orange Pi 5 Pro to the chassis using adhesive. The RPLidar was initially positioned near the middle of the car. However, the arrangement required further consideration because the wiring was close to the wheels and could potentially interfere with their movement. This highlighted the importance of evaluating the physical layout of the components alongside the electrical design. V1 provided our first assembled prototype and a starting point for identifying mechanical issues that needed to be addressed before more extensive testing.
-
-
-August 14, 2026 — Preparation for RPLidar Testing
-We obtained walls to construct an obstacle-testing environment for the RPLidar. The planned tests were intended to investigate the sensor's ability to detect track boundaries and obstacles at different heights. However, the robot was still incomplete, so we could not carry out the intended testing session. We postponed the evaluation until the physical assembly was sufficiently complete to allow meaningful testing of the sensor in relation to the robot's actual dimensions and mounting position.
-
-August 15, 2026 — Construction of a Makeshift Testing Track
-We constructed a makeshift track to begin evaluating the RPLidar's functionality in a physical environment. We used walls to investigate how the sensor detected boundaries at different heights and how their positions affected its readings. This allowed us to move beyond simulator-based observations and examine the sensor's behavior in relation to the robot's physical configuration. The observations from this testing session provided information that could be used to evaluate the sensor's mounting position and the robot's ability to detect its surroundings.
-
-August 19, 2026 — Mechanical Issues with the RPLidar Mount (V2 Development)
-During development, we repositioned the RPLidar toward the front of the car, creating the V2 configuration. This change was intended to explore a more suitable sensor position for obstacle detection. However, the front-mounted arrangement introduced additional mechanical considerations, particularly concerning the acrylic platform supporting the sensor and the available clearance around the chassis. During testing, we observed that the robot could become stuck against this platform, indicating that the mounting structure interfered with its movement. This demonstrated that sensor placement needed to account not only for detection coverage but also for the physical clearance required for the robot to navigate the track.
-
-August 19, 2026 — Investigation of RPLidar Navigation Issues
-During autonomous navigation testing, we also observed that the robot's RPLidar-based navigation algorithm could cause it to turn in the wrong direction in certain situations. We identified issues with the geometric calculations used to interpret sensor readings and determine the appropriate turning direction. In addition, the robot needed to update obstacle information more frequently and respond with faster turning movements. These findings showed that reliable navigation depended on both the quality of the sensor data and the accuracy of the algorithm interpreting that data. The problem therefore required further development of the robot's navigation logic.
-
-August 24, 2026 — Mechanical Reassembly and Version 3 (V3)
-We disassembled and rebuilt the robot to improve component placement and overall mechanical efficiency. During this redesign, we moved the RPLidar 3 cm backwards from its front-mounted position in V2 to revise the sensor layout and weight distribution. We also moved the motor driver and buck converter underneath the chassis, between the motors, to improve cable routing and organize the electronic components more efficiently. The battery was relocated to the top of the chassis, between the RPLidar and Orange Pi 5 Pro, to make it easier to access and replace. These changes established the V3 configuration and addressed several practical considerations identified during earlier assembly and testing.
-
-August 25, 2026 — Autonomous Navigation and Obstacle Challenge Testing
-We tested the robot on an obstacle-challenge track to evaluate how the PixyCam 2 and RPLidar worked together during autonomous navigation. The RPLidar provided distance information about surrounding obstacles, while the PixyCam 2 supplied visual information through color detection. Testing the sensors together allowed us to observe how the robot responded to the track environment and whether the combined sensing system supported its movement decisions. During testing, we identified occasional difficulties detecting green obstacles, particularly when they were outside the PixyCam 2's field of view. This indicated that the camera's mounting position and viewing angle required further consideration.
-
-August 25–September 1, 2026 — PixyCam 2 Repositioning and Version 3.1 (V3.1)
-Following the obstacle-challenge testing, we repositioned the PixyCam 2 from the front of the robot to the top of the RPLidar, creating the V3.1 configuration. Its original position at the front exposed the camera to potential collisions and limited its view of the ground. Mounting the camera above the RPLidar was intended to provide a clearer viewing angle for ground-line detection while reducing the risk of direct physical interference. This modification was also intended to help address the detection difficulties observed during testing. However, further testing was still necessary to determine whether the revised mounting position improved line detection and the recognition of green obstacles.
-
-September 1, 2026 — Navigation Logic Improvements
-We modified the robot's code to account for a scenario that had previously caused problems during autonomous operation. Earlier testing had revealed issues with the RPLidar-based navigation logic, including incorrect turning behavior caused by geometric calculations. The robot also needed to update obstacle information more frequently and respond with faster turning movements. This software revision was intended to improve the robot's decision-making when responding to the track environment. The updated code would need to be tested again to determine whether it resolved the original issue and whether any additional adjustments were necessary.
+MOM's Engineering Journal can be found in the Docs folder under engineering_journal.md
 
 ###12. Credits and External Resource
 https://youtu.be/ulTM1uV1Bvg?si=4LF2zQf9gxllorqJ <- car assembly kit
